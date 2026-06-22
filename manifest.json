@@ -1,7 +1,7 @@
 {
-  "name": "Производственные линии",
-  "short_name": "ПЛ Компании",
-  "description": "Производственные линии всех отделов компании",
+  "name": "Embassy · Производственные линии",
+  "short_name": "Embassy ПЛ",
+  "description": "Производственные линии всех отделов Embassy IELTS",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f5f4f0",
