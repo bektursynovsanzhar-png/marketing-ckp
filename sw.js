@@ -1,4 +1,4 @@
-const CACHE = 'marketing-pl-v3';
+const CACHE = 'marketing-pl-v5';
 const FILES = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {

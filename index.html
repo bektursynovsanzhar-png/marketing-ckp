@@ -3,574 +3,576 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Производственная линия — Маркетинг</title>
+<title>Производственные линии</title>
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ПЛ Компании">
+<meta name="theme-color" content="#534AB7">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
   --ink:#1a1918;--ink2:#6b6963;--ink3:#a8a59e;
   --surface:#ffffff;--surface2:#f7f6f3;--surface3:#f0efe9;
   --edge:rgba(0,0,0,0.08);--edge2:rgba(0,0,0,0.14);
-  --purple:#534AB7;--purple-bg:#EEEDFE;--purple-text:#3C3489;
-  --teal:#0F6E56;--teal-bg:#E1F5EE;--teal-text:#085041;
-  --coral:#993C1D;--coral-bg:#FAECE7;--coral-text:#712B13;
-  --amber:#854F0B;--amber-bg:#FAEEDA;--amber-text:#633806;
   --page-bg:#f5f4f0;
+  --tab-h:56px;
   --r:12px;
+  --accent:#534AB7;--accent-bg:#EEEDFE;--accent-text:#3C3489;
+  --teal:#0F6E56;--teal-bg:#E1F5EE;--teal-text:#085041;
+  --amber:#854F0B;--amber-bg:#FAEEDA;
+  --coral:#993C1D;--coral-bg:#FAECE7;
 }
 @media(prefers-color-scheme:dark){
   :root{
     --ink:#e8e6de;--ink2:#9c9a92;--ink3:#5f5e5a;
     --surface:#252523;--surface2:#2e2e2b;--surface3:#363633;
     --edge:rgba(255,255,255,0.08);--edge2:rgba(255,255,255,0.14);
-    --purple:#7F77DD;--purple-bg:#26215C;--purple-text:#AFA9EC;
-    --teal:#1D9E75;--teal-bg:#04342C;--teal-text:#5DCAA5;
-    --coral:#D85A30;--coral-bg:#4A1B0C;--coral-text:#F0997B;
-    --amber:#EF9F27;--amber-bg:#412402;--amber-text:#FAC775;
     --page-bg:#1c1c1a;
+    --accent:#7F77DD;--accent-bg:#26215C;--accent-text:#AFA9EC;
+    --teal:#1D9E75;--teal-bg:#04342C;--teal-text:#5DCAA5;
+    --amber:#EF9F27;--amber-bg:#412402;
+    --coral:#D85A30;--coral-bg:#4A1B0C;
   }
 }
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--page-bg);color:var(--ink);font-size:14px;line-height:1.5;min-height:100vh;}
-.page{max-width:900px;margin:0 auto;padding:3rem 1.5rem 4rem;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:var(--page-bg);color:var(--ink);font-size:14px;line-height:1.5;padding-bottom:calc(var(--tab-h) + 1rem);}
 
-.top-bar{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1.5rem;gap:12px;flex-wrap:wrap;}
-.top-left h1{font-size:20px;font-weight:600;color:var(--ink);margin-bottom:4px;}
-.top-left p{font-size:12px;color:var(--ink3);}
-.top-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
-.tag{font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);border:0.5px solid var(--edge2);border-radius:20px;padding:3px 10px;white-space:nowrap;}
-.tag.purple{background:var(--purple-bg);color:var(--purple-text);border-color:rgba(83,74,183,0.2);}
+/* TAB BAR */
+.tab-bar{position:fixed;bottom:0;left:0;right:0;height:var(--tab-h);background:var(--surface);border-top:0.5px solid var(--edge2);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;padding:6px 2px;color:var(--ink3);transition:color 0.15s;-webkit-tap-highlight-color:transparent;}
+.tab-btn.active{color:var(--accent);}
+.tab-icon{font-size:18px;line-height:1;}
+.tab-label{font-size:9px;font-weight:500;letter-spacing:0.02em;white-space:nowrap;}
 
-.edit-hint{font-size:12px;color:var(--ink3);display:flex;align-items:center;gap:6px;background:var(--surface);border:0.5px solid var(--edge);border-radius:20px;padding:4px 14px;margin-bottom:1.5rem;width:fit-content;}
+/* PAGES */
+.page{display:none;padding:1.5rem 1rem 1rem;max-width:860px;margin:0 auto;}
+.page.active{display:block;}
 
-.team-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:2rem;}
-.team-card{background:var(--surface);border:0.5px solid var(--edge);border-radius:10px;padding:9px 14px;display:flex;align-items:center;gap:8px;}
-.team-avatar{width:28px;height:28px;border-radius:50%;background:var(--purple-bg);color:var(--purple-text);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;}
-.team-name{font-size:12px;font-weight:500;color:var(--ink);}
-.team-ckp{font-size:11px;color:var(--ink3);margin-top:1px;}
+.page-header{margin-bottom:1.25rem;}
+.page-header h1{font-size:18px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.page-header p{font-size:12px;color:var(--ink3);}
+.top-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;}
+.tag{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);border:0.5px solid var(--edge2);border-radius:20px;padding:2px 9px;white-space:nowrap;}
+.tag.accent{background:var(--accent-bg);color:var(--accent-text);border-color:rgba(83,74,183,0.2);}
 
-.divider-label{display:flex;align-items:center;gap:12px;margin:1.5rem 0 1rem;}
-.divider-label span{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;}
-.divider-label::before,.divider-label::after{content:'';flex:1;height:0.5px;background:var(--edge2);}
+.edit-hint{font-size:11px;color:var(--ink3);display:inline-flex;align-items:center;gap:5px;background:var(--surface);border:0.5px solid var(--edge);border-radius:20px;padding:3px 12px;margin-bottom:1rem;}
 
-.in-out{display:flex;align-items:stretch;margin-bottom:2rem;border-radius:var(--r);overflow:hidden;border:0.5px solid var(--edge2);}
-.io-side{flex:1;padding:16px 20px;background:var(--surface);}
-.io-divider{width:1px;background:var(--edge2);flex-shrink:0;}
-.io-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;}
-.io-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:7px;vertical-align:middle;flex-shrink:0;}
-.io-title{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4;}
-.io-sub{font-size:12px;color:var(--ink2);margin-top:4px;line-height:1.4;}
+/* TEAM STRIP */
+.team-strip{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;}
+.team-card{background:var(--surface);border:0.5px solid var(--edge);border-radius:10px;padding:8px 12px;display:flex;align-items:flex-start;gap:8px;max-width:100%;}
+.team-avatar{width:26px;height:26px;border-radius:50%;background:var(--accent-bg);color:var(--accent-text);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;margin-top:1px;}
+.team-name{font-size:12px;font-weight:600;color:var(--ink);}
+.team-ckp{font-size:11px;color:var(--ink3);margin-top:2px;line-height:1.35;}
+
+/* IN/OUT */
+.in-out{display:flex;margin-bottom:1.25rem;border-radius:var(--r);overflow:hidden;border:0.5px solid var(--edge2);}
+@media(max-width:480px){.in-out{flex-direction:column;}}
+.io-side{flex:1;padding:12px 16px;background:var(--surface);}
+.io-div{width:1px;background:var(--edge2);flex-shrink:0;}
+@media(max-width:480px){.io-div{width:100%;height:1px;}}
+.io-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.io-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+.io-title{font-size:13px;font-weight:600;color:var(--ink);line-height:1.4;}
+.io-sub{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.4;}
+
+/* DIVIDER */
+.div-label{display:flex;align-items:center;gap:10px;margin:1.25rem 0 .75rem;}
+.div-label span{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);white-space:nowrap;}
+.div-label::before,.div-label::after{content:'';flex:1;height:0.5px;background:var(--edge2);}
+
+/* PIPELINE */
+.pipeline{display:grid;grid-template-columns:26px 1fr;gap:0 12px;margin-bottom:1.25rem;}
+.pipe-spine{display:flex;flex-direction:column;align-items:center;}
+.spine-node{width:26px;height:26px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;color:#fff;}
+.spine-line{flex:1;width:1px;background:var(--edge2);min-height:10px;}
+.spine-line.last{display:none;}
+.stage-wrap{padding-bottom:10px;}
+.stage-card{border:0.5px solid var(--edge);border-radius:var(--r);background:var(--surface);overflow:hidden;cursor:pointer;transition:border-color 0.15s;}
+.stage-card:hover,.stage-card:active{border-color:var(--edge2);}
+.stage-card.open{border-color:var(--accent);}
+.stage-head{display:flex;align-items:center;gap:10px;padding:11px 14px;}
+.sh-text{flex:1;min-width:0;}
+.sh-name{font-size:13px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sh-product{font-size:11px;color:var(--ink3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sh-meta{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.role-pill{font-size:10px;color:var(--ink2);background:var(--surface2);border:0.5px solid var(--edge);border-radius:20px;padding:2px 8px;white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
+.sh-chev{color:var(--ink3);font-size:12px;transition:transform 0.2s;flex-shrink:0;}
+.stage-card.open .sh-chev{transform:rotate(180deg);}
+.stage-body{display:none;border-top:0.5px solid var(--edge);}
+.stage-card.open .stage-body{display:block;}
+.tasks-col{padding:12px 14px;border-bottom:0.5px solid var(--edge);}
+.meta-row-wrap{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px 14px;border-bottom:0.5px solid var(--edge);}
+.meta-item{}
+.col-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:7px;}
+.meta-lbl{font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink3);margin-bottom:3px;}
+.meta-val{font-size:12px;color:var(--ink);font-weight:600;line-height:1.3;}
+.task-item{display:flex;gap:7px;font-size:12px;color:var(--ink2);padding:3px 0;line-height:1.4;}
+.task-item::before{content:'–';color:var(--ink3);flex-shrink:0;}
+.product-chip{display:inline-flex;align-items:flex-start;gap:4px;background:var(--accent-bg);color:var(--accent-text);border-radius:7px;padding:4px 9px;font-size:11px;font-weight:600;line-height:1.35;margin-top:4px;}
+.metrics-col{padding:10px 14px;}
+.metric-pills{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px;}
+.metric-pill{font-size:10px;color:var(--ink2);background:var(--surface2);border:0.5px solid var(--edge);border-radius:20px;padding:2px 9px;}
+
+/* CHAIN */
+.chain-scroll{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.chain-step{background:var(--surface);border:0.5px solid var(--edge);border-radius:7px;padding:4px 10px;font-size:11px;font-weight:500;color:var(--ink);}
+.chain-step.first{background:var(--accent-bg);color:var(--accent-text);border-color:rgba(83,74,183,0.2);}
+.chain-step.last{background:var(--teal-bg);color:var(--teal-text);border-color:rgba(15,110,86,0.2);}
+.chain-arr{font-size:11px;color:var(--ink3);}
+
+/* BOTTOM */
+.bottom{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.bottom{grid-template-columns:1fr;}}
+.panel{background:var(--surface);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;}
+.panel-head{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.panel-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.pi-amber{background:var(--amber-bg);}
+.pi-teal{background:var(--teal-bg);}
+.pi-coral{background:var(--coral-bg);}
+.pi-accent{background:var(--accent-bg);}
+.panel-title{font-size:12px;font-weight:600;color:var(--ink);}
+.bn-item{display:flex;gap:8px;padding:7px 0;border-bottom:0.5px solid var(--edge);}
+.bn-item:last-child{border-bottom:none;}
+.bn-bar{width:2px;border-radius:2px;background:var(--amber);flex-shrink:0;align-self:stretch;min-height:28px;}
+.bn-title{font-size:11px;font-weight:600;color:var(--ink);margin-bottom:2px;}
+.bn-text{font-size:11px;color:var(--ink2);line-height:1.4;}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+.kpi-cell{background:var(--surface2);border-radius:7px;padding:9px 10px;}
+.kpi-val{font-size:15px;font-weight:700;color:var(--ink);}
+.kpi-lbl{font-size:10px;color:var(--ink3);margin-top:2px;}
+.imp-item{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:0.5px solid var(--edge);}
+.imp-item:last-child{border-bottom:none;}
+.imp-dept{font-size:10px;font-weight:600;background:var(--surface2);border-radius:20px;padding:2px 8px;color:var(--ink2);white-space:nowrap;flex-shrink:0;}
+.imp-text{font-size:11px;color:var(--ink2);line-height:1.4;padding-top:1px;}
+.full-col{grid-column:1/-1;}
 
 [contenteditable]{outline:none;border-radius:3px;transition:background 0.15s;}
-[contenteditable]:hover{background:rgba(83,74,183,0.05);}
 [contenteditable]:focus{background:rgba(83,74,183,0.09);box-shadow:0 0 0 2px rgba(83,74,183,0.18);}
 
-.pipeline{display:grid;grid-template-columns:28px 1fr;gap:0 16px;margin-bottom:2rem;}
-.pipe-spine{display:flex;flex-direction:column;align-items:center;}
-.spine-node{width:28px;height:28px;border-radius:50%;background:var(--purple);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;color:#fff;transition:transform 0.15s;cursor:default;}
-.spine-line{flex:1;width:1px;background:var(--edge2);min-height:12px;}
-.spine-line.last{display:none;}
-
-.stage-wrap{padding-bottom:12px;}
-.stage-card{border:0.5px solid var(--edge);border-radius:var(--r);background:var(--surface);overflow:hidden;cursor:pointer;transition:border-color 0.15s;}
-.stage-card:hover{border-color:var(--edge2);}
-.stage-card.open{border-color:var(--purple);}
-
-.stage-head{display:flex;align-items:center;gap:12px;padding:13px 16px;}
-.sh-text{flex:1;}
-.sh-name{font-size:14px;font-weight:600;color:var(--ink);}
-.sh-product{font-size:12px;color:var(--ink3);margin-top:2px;}
-.sh-meta{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.role-pill{font-size:11px;color:var(--ink2);background:var(--surface2);border:0.5px solid var(--edge);border-radius:20px;padding:2px 9px;white-space:nowrap;}
-.sh-chev{color:var(--ink3);font-size:13px;transition:transform 0.2s;flex-shrink:0;}
-.stage-card.open .sh-chev{transform:rotate(180deg);}
-
-.stage-body{display:none;border-top:0.5px solid var(--edge);}
-.stage-card.open .stage-body{display:grid;grid-template-columns:1fr 210px;}
-.tasks-col{padding:14px 16px;border-right:0.5px solid var(--edge);}
-.meta-col{padding:14px 16px;}
-.col-lbl{font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;}
-.task-item{display:flex;gap:8px;font-size:12px;color:var(--ink2);padding:4px 0;line-height:1.4;}
-.task-item::before{content:'–';color:var(--ink3);flex-shrink:0;}
-.meta-row{margin-bottom:13px;}
-.meta-lbl{font-size:10px;letter-spacing:0.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:4px;}
-.meta-val{font-size:12px;color:var(--ink);font-weight:600;}
-.product-chip{display:inline-flex;align-items:flex-start;gap:5px;background:var(--purple-bg);color:var(--purple-text);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:600;line-height:1.35;}
-.metrics-col{grid-column:1/-1;padding:12px 16px;border-top:0.5px solid var(--edge);}
-.metric-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;}
-.metric-pill{font-size:11px;color:var(--ink2);background:var(--surface2);border:0.5px solid var(--edge);border-radius:20px;padding:3px 10px;}
-
-.chain-section{margin-bottom:2rem;}
-.chain-scroll{display:flex;flex-wrap:wrap;align-items:center;gap:6px;}
-.chain-step{background:var(--surface);border:0.5px solid var(--edge);border-radius:8px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--ink);}
-.chain-step.first{background:var(--purple-bg);color:var(--purple-text);border-color:rgba(83,74,183,0.2);}
-.chain-step.last{background:var(--teal-bg);color:var(--teal-text);border-color:rgba(15,110,86,0.2);}
-.chain-arr{font-size:12px;color:var(--ink3);}
-
-.bottom{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.panel{background:var(--surface);border:0.5px solid var(--edge);border-radius:var(--r);padding:16px;}
-.panel-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-.panel-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.pi-purple{background:var(--purple-bg);}
-.pi-teal{background:var(--teal-bg);}
-.pi-amber{background:var(--amber-bg);}
-.pi-coral{background:var(--coral-bg);}
-.panel-title{font-size:13px;font-weight:600;color:var(--ink);}
-
-.ckp-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:6px 0;border-bottom:0.5px solid var(--edge);}
-.ckp-row:last-child{border-bottom:none;}
-.ckp-role{font-size:12px;color:var(--ink2);}
-.ckp-val{font-size:12px;font-weight:600;color:var(--ink);text-align:right;}
-
-.bn-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--edge);}
-.bn-item:last-child{border-bottom:none;}
-.bn-bar{width:2px;border-radius:2px;background:var(--amber);flex-shrink:0;align-self:stretch;min-height:30px;}
-.bn-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px;}
-.bn-text{font-size:11px;color:var(--ink2);line-height:1.45;}
-
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.kpi-cell{background:var(--surface2);border-radius:8px;padding:10px 12px;}
-.kpi-val{font-size:17px;font-weight:700;color:var(--ink);}
-.kpi-lbl{font-size:11px;color:var(--ink3);margin-top:2px;}
-
-.imp-item{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--edge);}
-.imp-item:last-child{border-bottom:none;}
-.imp-dept{font-size:11px;font-weight:600;background:var(--surface2);border-radius:20px;padding:2px 9px;color:var(--ink2);white-space:nowrap;flex-shrink:0;}
-.imp-text{font-size:11px;color:var(--ink2);line-height:1.4;padding-top:2px;}
-
-@media(max-width:600px){
-  .bottom,.in-out{flex-direction:column;}
-  .bottom{grid-template-columns:1fr;}
-  .io-divider{width:100%;height:1px;}
-  .stage-card.open .stage-body{grid-template-columns:1fr;}
-  .tasks-col{border-right:none;border-bottom:0.5px solid var(--edge);}
-}
-@media print{
-  body{background:#fff;}
-  .stage-body{display:grid!important;grid-template-columns:1fr 210px;}
-  .sh-chev,.edit-hint{display:none;}
-}
-</style>
-
-  <link rel="manifest" href="manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <meta name="apple-mobile-web-app-title" content="Маркетинг ПЛ">
-  <meta name="theme-color" content="#534AB7">
-  <link rel="apple-touch-icon" href="icon-192.png">
-
-<style>
-#pwa-banner{
-  display:none;position:fixed;bottom:1.2rem;left:50%;transform:translateX(-50%);
-  background:#534AB7;color:#fff;border:none;border-radius:28px;
-  padding:12px 24px;font-size:14px;font-weight:600;cursor:pointer;
-  box-shadow:0 4px 20px rgba(83,74,183,0.35);z-index:999;
-  display:flex;align-items:center;gap:10px;white-space:nowrap;
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
-}
-#pwa-banner .pwa-icon{font-size:18px;}
-#pwa-banner .pwa-close{
-  margin-left:8px;opacity:0.7;font-size:18px;line-height:1;
-  background:none;border:none;color:#fff;cursor:pointer;padding:0;
-}
+/* RESET BTN */
+#reset-btn{position:fixed;top:.75rem;right:.75rem;z-index:999;font-size:11px;background:var(--surface);border:0.5px solid var(--edge2);border-radius:20px;padding:4px 11px;cursor:pointer;color:var(--ink3);font-family:inherit;}
 </style>
 </head>
 <body>
-<div class="page">
 
-<div class="top-bar">
-  <div class="top-left">
-    <h1 contenteditable="true">Производственная линия · Маркетинг</h1>
-    <p contenteditable="true">Основные каналы: таргет + органика Instagram · 5 человек в команде</p>
-  </div>
-  <div class="top-tags">
-    <span class="tag purple">5 сотрудников</span>
-    <span class="tag">6 этапов</span>
-    <span class="tag">Instagram</span>
-  </div>
-</div>
+<button id="reset-btn" onclick="resetData()">↺ Сброс</button>
 
-<div class="edit-hint">✏ Кликните на любой текст для редактирования</div>
+<!-- TAB BAR -->
+<div class="tab-bar" id="tab-bar"></div>
 
-<div class="divider-label"><span>Состав команды и ЦКП</span></div>
-<div class="team-strip" id="team-strip"></div>
+<!-- PAGES -->
+<div id="pages"></div>
 
-<div class="divider-label"><span>Производственная линия</span></div>
-
-<div class="in-out">
-  <div class="io-side">
-    <div class="io-lbl">Входящий продукт</div>
-    <div class="io-title" contenteditable="true"><span class="io-dot" style="background:var(--purple)"></span>Бизнес-цели компании + бюджет на маркетинг</div>
-    <div class="io-sub" contenteditable="true">Целевые показатели по заявкам, бюджет на таргет, позиционирование продукта — от руководства</div>
-  </div>
-  <div class="io-divider"></div>
-  <div class="io-side">
-    <div class="io-lbl">Конечный продукт (ЦКП отдела)</div>
-    <div class="io-title" contenteditable="true"><span class="io-dot" style="background:var(--teal)"></span>Стабильный поток целевых заявок из Instagram</div>
-    <div class="io-sub" contenteditable="true">Квалифицированные обращения через таргет и органику, готовые к обработке отделом продаж</div>
-  </div>
-</div>
-
-<div class="pipeline" id="pipeline"></div>
-
-<div class="chain-section">
-  <div class="divider-label"><span>Цепочка продуктов</span></div>
-  <div class="chain-scroll" id="chain"></div>
-</div>
-
-<div class="divider-label"><span>Аналитика и узкие места</span></div>
-<div class="bottom">
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-icon pi-amber">⚡</div>
-      <div class="panel-title">Узкие места</div>
-    </div>
-    <div id="bn"></div>
-  </div>
-  <div class="panel">
-    <div class="panel-head">
-      <div class="panel-icon pi-teal">📊</div>
-      <div class="panel-title">Ключевые метрики отдела</div>
-    </div>
-    <div class="kpi-grid" id="kpis"></div>
-  </div>
-  <div class="panel" style="grid-column:1/-1">
-    <div class="panel-head">
-      <div class="panel-icon pi-coral">🔗</div>
-      <div class="panel-title">Как продукт отдела влияет на другие подразделения</div>
-    </div>
-    <div id="impact" style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;"></div>
-  </div>
-</div>
-
-</div>
 <script>
-const team=[
-  {initials:"РОМ",name:"Руководитель отдела маркетинга",ckp:"Выполненный план по заявкам с еженедельным отчётом, переданным руководству"},
-  {initials:"МКТ",name:"Маркетолог",ckp:"Готовый контент-план с техзаданиями для СММ и дизайнера, согласованный до начала месяца"},
-  {initials:"СММ",name:"СММ-специалист",ckp:"Опубликованный контент по расписанию с обработанными обращениями, переданными в продажи"},
-  {initials:"ДЗН",name:"Дизайнер",ckp:"Финальные макеты в нужных форматах, сданные в срок без правок"},
-  {initials:"ТРГ",name:"Таргетолог",ckp:"Квалифицированные заявки согласно плану продаж, внесённые в CRM с контактными данными"},
-];
+const STORE = 'pl-app-v1';
 
-const S=[
+const DEPTS = [
   {
-    n:1,
-    name:"Стратегия и планирование",
-    product:"Утверждённый контент-план + медиаплан таргета",
-    role:"Руководитель отдела маркетинга + Маркетолог",
-    deadline:"1 раз в месяц, до 5-го числа",
-    tasks:[
-      "Анализ результатов прошлого периода (заявки, охват, CTR)",
-      "Постановка целей на месяц: кол-во заявок, CPL, охват",
-      "Утверждение рубрик и тем контента на месяц",
-      "Согласование бюджета и форматов таргета",
-      "Распределение задач между командой"
+    id:'marketing', icon:'📣', label:'Маркетинг',
+    title:'Производственная линия · Маркетинг',
+    sub:'Основные каналы: таргет + органика Instagram · 5 человек',
+    tags:['5 сотрудников','6 этапов','Instagram'],
+    inputTitle:'Бизнес-цели компании + бюджет на маркетинг',
+    inputSub:'Целевые показатели по заявкам, бюджет на таргет, позиционирование продукта — от руководства',
+    outputTitle:'Стабильный поток целевых заявок из Instagram',
+    outputSub:'Квалифицированные обращения через таргет и органику, готовые к обработке отделом продаж',
+    team:[
+      {i:'РОМ',name:'Руководитель отдела маркетинга',ckp:'Выполненный план по заявкам с еженедельным отчётом, переданным руководству'},
+      {i:'МКТ',name:'Маркетолог',ckp:'Готовый контент-план с техзаданиями для СММ и дизайнера, согласованный до начала месяца'},
+      {i:'СММ',name:'СММ-специалист',ckp:'Опубликованный контент по расписанию с обработанными обращениями, переданными в продажи'},
+      {i:'ДЗН',name:'Дизайнер',ckp:'Финальные макеты в нужных форматах, сданные в срок без правок'},
+      {i:'ТРГ',name:'Таргетолог',ckp:'Квалифицированные заявки согласно плану продаж, внесённые в CRM с контактными данными'},
     ],
-    metrics:["План по заявкам зафиксирован","Бюджет таргета утверждён","Контент-план на 100% закрывает месяц"]
+    stages:[
+      {n:1,name:'Стратегия и планирование',product:'Утверждённый контент-план + медиаплан таргета',role:'РОМ + Маркетолог',deadline:'1 раз в месяц, до 5-го числа',tasks:['Анализ результатов прошлого периода','Постановка целей: заявки, CPL, охват','Утверждение рубрик и тем контента','Согласование бюджета и форматов таргета','Распределение задач между командой'],metrics:['План по заявкам зафиксирован','Бюджет таргета утверждён','Контент-план закрывает месяц на 100%']},
+      {n:2,name:'Создание контента (тексты)',product:'Готовые тексты для постов, Stories и рекламы',role:'Маркетолог / СММ',deadline:'За 3–5 дней до публикации',tasks:['Тексты постов по утверждённым рубрикам','Сценарии для Reels и Stories','Рекламные тексты для таргета (3–5 вариантов)','Подписи, хэштеги, призывы к действию'],metrics:['Соответствие tone of voice','Чёткий CTA в каждом посте','Рекламные тексты прошли A/B-отбор']},
+      {n:3,name:'Создание визуала',product:'Визуальные материалы: посты, Stories, креативы',role:'Дизайнер',deadline:'За 2–3 дня до публикации',tasks:['Дизайн постов по брендбуку и ТЗ','Stories и Reels-обложки','Рекламные креативы (статика + анимация)','Сдача файлов в нужных форматах'],metrics:['Соответствие брендбуку','Форматы Instagram соблюдены','Сдано в срок без правок']},
+      {n:4,name:'Публикация и ведение Instagram',product:'Опубликованный контент с обработанными обращениями',role:'СММ-специалист',deadline:'По контент-плану, ежедневно',tasks:['Публикация постов, Stories, Reels','Ответы на комментарии и директ','Передача заявок из Direct в продажи','Активации: опросы, голосования'],metrics:['Выход контента по плану','Ответ в директ < 30 минут','ER не ниже benchmark']},
+      {n:5,name:'Запуск и ведение таргета',product:'Активные рекламные кампании с заявками',role:'Таргетолог',deadline:'Запуск 1–2 дня; ведение ежедневно',tasks:['Настройка аудиторий и плейсментов','Запуск объявлений на базе креативов','Ежедневная оптимизация (CPL, CTR)','A/B-тест креативов и аудиторий','Передача лидов из Lead Ads в CRM'],metrics:['CPL не превышает плановый','Бюджет расходуется равномерно','Заявки в CRM в тот же день']},
+      {n:6,name:'Анализ и отчётность',product:'Еженедельный отчёт по заявкам и эффективности',role:'Маркетолог + РОМ',deadline:'Каждый понедельник + итог месяца',tasks:['Сбор данных: заявки, охват, CPL, ER','Анализ таргет vs органика','Выводы: что масштабировать, что отключить','Отчёт для руководства компании'],metrics:['Отчёт сдан в срок','ROI и CPL по каждому каналу','Есть конкретные решения, а не только цифры']},
+    ],
+    chain:['Бизнес-цели','Контент-план','Тексты','Визуалы','Контент','Кампании','Заявки в CRM'],
+    bns:[
+      {t:'Тексты без ТЗ',tx:'СММ пишет без брифа → дизайнер получает задачу в последний момент.'},
+      {t:'Директ без регламента',tx:'Заявки теряются или обрабатываются с опозданием.'},
+      {t:'Устаревшие креативы',tx:'Таргетолог запускает рекламу на старые материалы → CTR падает.'},
+    ],
+    kpis:[{v:'Заявки/мес',l:'Основной KPI'},{v:'CPL ₸',l:'Стоимость заявки'},{v:'CTR %',l:'Кликабельность'},{v:'ER %',l:'Вовлечённость'},{v:'Охват/мес',l:'Органика + таргет'},{v:'CR→заявка',l:'Конверсия директ'}],
+    impacts:[{d:'Продажи',t:'Поток заявок из директа и таргета с контекстом'},{d:'Продукт',t:'Обратная связь: что заходит аудитории'},{d:'HR',t:'Контент для employer brand'},{d:'Руководство',t:'ROI маркетинга по каналам'}],
   },
   {
-    n:2,
-    name:"Создание контента (тексты)",
-    product:"Готовые тексты для постов, Stories и рекламных объявлений",
-    role:"Маркетолог / СММ-специалист",
-    deadline:"За 3–5 дней до публикации",
-    tasks:[
-      "Написание текстов постов по утверждённым рубрикам",
-      "Создание сценариев для Reels и Stories",
-      "Написание рекламных текстов для таргета (3–5 вариантов)",
-      "Подготовка подписей, хэштегов, призывов к действию",
-      "Согласование текстов с РОМ при необходимости"
+    id:'sales', icon:'💼', label:'Продажи',
+    title:'Производственная линия · Отдел продаж Embassy IELTS',
+    sub:'От первого контакта до студента, готового к результату IELTS',
+    tags:['9 сотрудников','9 этапов','IELTS'],
+    inputTitle:'Потенциальный клиент (лид), заинтересованный в подготовке к IELTS',
+    inputSub:'Входящий лид из маркетинга — Instagram (таргет + органика), внесённый в CRM',
+    outputTitle:'Студент IELTS, начавший обучение с подходящей программой',
+    outputSub:'Клиент с высокой вероятностью достижения целевого балла, переданный в Академию',
+    team:[
+      {i:'РОП',name:'Руководитель отдела продаж',ckp:'Предсказуемая система продаж с выполнением плана'},
+      {i:'SDR',name:'SDR / Лид-менеджер',ckp:'Квалифицированный лид, готовый к консультации'},
+      {i:'SM',name:'Sales Manager',ckp:'Оплаченный договор на обучение'},
+      {i:'СМП',name:'Старший менеджер продаж',ckp:'Стабильная конверсия отдела'},
+      {i:'CS',name:'Customer Success Manager',ckp:'Студент с высоким уровнем удовлетворённости'},
     ],
-    metrics:["Тексты соответствуют tone of voice","Каждый пост имеет чёткий CTA","Рекламные тексты прошли базовый A/B-отбор"]
+    stages:[
+      {n:1,name:'Квалификация лида',product:'Квалифицированный лид с определённой потребностью',role:'SDR / Лид-менеджер',deadline:'5–15 минут',tasks:['Проверить актуальность запроса','Определить цели клиента','Выявить сроки сдачи IELTS','Определить мотивацию','Разделить лиды по приоритету'],metrics:['% дозвона','% квалифицированных лидов','Заполненность CRM','Наличие цели IELTS и дедлайна']},
+      {n:2,name:'Диагностика потребности клиента',product:'Диагностическая карта клиента',role:'Менеджер продаж / IELTS-консультант',deadline:'30–45 минут',tasks:['Провести консультацию','Определить текущий уровень','Выявить разрыв в балле','Понять причины покупки','Определить финансовый диапазон'],metrics:['Заполненная карта потребностей','Есть текущий уровень','Есть целевой балл','Есть причина покупки','Есть финансовый диапазон']},
+      {n:3,name:'Формирование решения',product:'Персональное образовательное предложение',role:'Sales Manager',deadline:'В день консультации',tasks:['Подобрать программу по срокам подготовки','Сформировать персональное предложение','Объяснить ценность результата'],metrics:['Соответствие программы целям клиента','Понимание клиентом результата','Персональное предложение сформировано','Конверсия консультация → предложение']},
+      {n:4,name:'Закрытие сделки',product:'Оплаченный договор на обучение IELTS',role:'Sales Manager',deadline:'1–7 дней',tasks:['Отработать сомнения','Провести переговоры','Согласовать оплату','Зафиксировать решение'],metrics:['Конверсия предложение → оплата','Средний чек','Скорость закрытия','% отказов по причинам']},
+      {n:5,name:'Передача клиента в обучение',product:'Готовый к обучению студент IELTS',role:'Sales Manager + Academic Coordinator',deadline:'24–48 часов',tasks:['Передать клиента академическому отделу','Передать всю информацию','Зафиксировать ожидания','Подготовить старт обучения'],metrics:['Полная CRM-карта','Нет потери информации','Студент вышел на первый урок','Удовлетворённость стартом']},
+      {n:6,name:'Контроль качества клиента',product:'Стабильный студент на пути к результату',role:'Customer Success Manager',deadline:'Весь период обучения',tasks:['Собирать обратную связь','Контролировать удовлетворённость','Передавать сигналы риска','Поддерживать вовлечённость'],metrics:['Retention (сохранение)','NPS','Количество обращений','Отзывы']},
+      {n:7,name:'Дополнительная поддержка',product:'Мотивированный студент, продолжающий обучение',role:'Customer Success Manager',deadline:'Постоянно',tasks:['Помощь в вопросах обучения','Поддержка мотивации','Решение организационных вопросов','Работа с возражениями'],metrics:['Уровень удовлетворённости','Количество обращений','Скорость решения вопросов','Отзывы']},
+      {n:8,name:'Завершение обучения',product:'Студент, готовый к сдаче IELTS',role:'Academic Coordinator + Customer Success',deadline:'1–2 недели',tasks:['Подготовка к экзамену','Контроль готовности','Напоминания и поддержка','Информирование о следующем шаге'],metrics:['Готовность к экзамену','Посещаемость','Выполнение заданий','Уверенность студента']},
+      {n:9,name:'Сбор обратной связи',product:'Отзывы студента и рекомендации',role:'Customer Success Manager',deadline:'1–3 дня',tasks:['Получить отзыв о курсе','Получить кейс (результат, путь студента)','Предложить продолжение обучения','Сформировать рекомендации'],metrics:['Количество отзывов','Рейтинг / NPS','Количество рекомендаций','Кейс для маркетинга']},
+    ],
+    chain:['Лид','Квалифицированный лид','Диагностическая карта','Персональное предложение','Оплаченный договор','Готовый студент IELTS','Стабильный студент','Выпускник с результатом'],
+    bns:[
+      {t:'Лид → Консультация',tx:'Не дозвонились, нет квалификации, менеджер не понял потребность. Контроль: скорость реакции, дозвон %, заполненность CRM.'},
+      {t:'Консультация → Продажа',tx:'Продаём курс, а не результат, нет выявления боли, нет доверия. Контроль: конверсия консультация → оплата, причины отказов, качество звонков.'},
+      {t:'Продажа → Обучение',tx:'Клиент оплатил, но не стартовал, ожидания не совпали. Контроль: activation rate, первый урок, возвраты.'},
+    ],
+    kpis:[{v:'Кол-во лидов',l:'Воронка'},{v:'Дозвон %',l:'Скорость обработки'},{v:'Конверсия → оплата',l:'Ключевая метрика'},{v:'Средний чек ₸',l:'Деньги'},{v:'Выручка/мес',l:'План / факт'},{v:'NPS',l:'Качество'}],
+    impacts:[{d:'Маркетинг',t:'Данные о качественных лидах и причинах покупки'},{d:'Академия',t:'Подготовленный студент с понятной целью IELTS'},{d:'Customer Success',t:'Клиент с правильными ожиданиями'},{d:'Финансы',t:'Прогнозируемая выручка'},{d:'Руководство',t:'Управляемая система роста'}],
+  },
+      id:'academy', icon:'🎓', label:'Академия',
+    title:'Производственная линия · Академический отдел Embassy IELTS',
+    sub:'От пробного урока до выпускника с подтверждённым результатом IELTS',
+    tags:['Академический директор','Методист','Преподаватели'],
+    inputTitle:'Оплативший студент',
+    inputSub:'Переданный из отдела продаж клиент — оплатил курс, готов к старту обучения',
+    outputTitle:'Выпускник с подтверждённым результатом IELTS и полученным отзывом',
+    outputSub:'Студент достиг целевого балла, есть кейс для маркетинга, сформированы рекомендации',
+    team:[
+      {i:'АД',name:'Академический директор',ckp:'Бесперебойно работающая операционка Академии с выполненным планом по результатам студентов'},
+      {i:'МТД',name:'Методист',ckp:'Актуальные программы курсов и обученная команда преподавателей, обеспечивающие достижение целевого балла IELTS'},
+      {i:'ПРП',name:'Преподаватель / Academic Advisor',ckp:'Студент, вовлечённый в учебный процесс с измеримым прогрессом по баллам IELTS'},
+      {i:'SC',name:'Student Care / Customer Success',ckp:'Удержанный и мотивированный студент, завершивший курс с отзывом'},
+    ],
+    stages:[
+      {n:1,name:'Пробный урок',product:'Карта академического маршрута студента',role:'Преподаватель / Academic Advisor',deadline:'1 день',tasks:['Определить текущий уровень английского','Выявить цель студента','Определить сроки подготовки','Познакомить со школой и методологией','Сформировать академический маршрут'],metrics:['Уровень определён','Цель зафиксирована','Маршрут сформирован и понятен студенту']},
+      {n:2,name:'Распределение в группу',product:'Сформированная учебная группа',role:'Руководитель учебного процесса',deadline:'1 день',tasks:['Подобрать уровень группы','Подобрать расписание','Назначить преподавателя','Добавить в учебные системы','Информировать студента'],metrics:['Группа подобрана по уровню','Расписание согласовано','Студент добавлен в систему']},
+      {n:3,name:'Старт обучения',product:'Студент, вовлечённый в учебный процесс',role:'Преподаватель',deadline:'1–3 дня',tasks:['Адаптация студента','Введение в программу','Постановка академических целей','Знакомство с материалами','Контроль дисциплины'],metrics:['Студент посетил первое занятие','Цели зафиксированы','Дисциплина соблюдается']},
+      {n:4,name:'Основной учебный процесс',product:'Академический прогресс студента',role:'Преподаватель',deadline:'4–12 недель',tasks:['Проведение занятий','Проверка домашних заданий','Обратная связь и разбор ошибок','Развитие всех навыков IELTS','Контроль дисциплины и прогресса'],metrics:['Посещаемость > 80%','Домашние задания выполняются','Прогресс по баллам фиксируется']},
+      {n:5,name:'Промежуточный контроль',product:'Отчёт о прогрессе студента',role:'Преподаватель / Академический директор',deadline:'Каждые 4–6 недель',tasks:['MOCK тестирование','Анализ результатов','Выявление сильных и слабых сторон','Корректировка плана подготовки','Обратная связь студенту и родителям'],metrics:['MOCK проведён в срок','Слабые зоны выявлены','План скорректирован','Обратная связь дана']},
+      {n:6,name:'Дополнительная поддержка',product:'Усиленный академический прогресс',role:'IELTS Club / Speaking Club / Преподаватель',deadline:'Постоянно',tasks:['Закрытие слабых зон','Дополнительные занятия (1:1 / мини-группы)','Speaking Club / IELTS Club','Сбор организационной обратной связи','Повышение мотивации'],metrics:['Слабые зоны закрыты','Студент посещает клубы','Мотивация на высоком уровне']},
+      {n:7,name:'Итоговое тестирование',product:'Подтверждённый академический результат',role:'Академический отдел',deadline:'1–2 недели',tasks:['Финальный MOCK','Проверка готовности к экзамену','Подтверждение прогнозируемого результата','Практика экзаменационных стратегий','Рекомендации на экзамен'],metrics:['Финальный MOCK пройден','Прогнозируемый балл подтверждён','Стратегии отработаны']},
+      {n:8,name:'Завершение обучения',product:'Выпускник программы Embassy IELTS',role:'Преподаватель / Student Care',deadline:'1 день',tasks:['Подведение итогов обучения','Выдача сертификата / завершение программы','Рекомендации для дальнейшего обучения / поступления','Инструктаж по дальнейшим шагам (экзамен, поступление)'],metrics:['Сертификат выдан','Инструктаж проведён','Следующий шаг понятен студенту']},
+      {n:9,name:'Сбор обратной связи',product:'Отзыв выпускника и кейс для маркетинга',role:'Student Care / Отдел качества',deadline:'1–3 дня',tasks:['Получить отзыв о курсе','Получить кейс (результат, путь студента)','Получить видеоотзыв (по желанию)','Получить рекомендации для новых студентов'],metrics:['Отзыв получен','Кейс зафиксирован','Видеоотзыв (по возможности)','Рекомендации для маркетинга переданы']},
+    ],
+    chain:['Оплативший студент','Карта маршрута','Учебная группа','Вовлечённый студент','Прогресс IELTS','Отчёт контроля','Итоговый результат','Выпускник','Кейс + отзыв'],
+    bns:[
+      {t:'Плохой онбординг на старте',tx:'Студент не понимает маршрут и ожидания → ранний риск отчисления.'},
+      {t:'Нет промежуточного контроля',tx:'Прогресс не отслеживается → студент не видит результата → теряет мотивацию.'},
+      {t:'Отзывы не собираются',tx:'Маркетинг не получает кейсы → нет контента для привлечения новых студентов.'},
+    ],
+    kpis:[{v:'% достижения цели',l:'Основной KPI'},{v:'Средний рост балла',l:'IELTS прогресс'},{v:'Завершаемость %',l:'Удержание'},{v:'NPS студентов',l:'Удовлетворённость'},{v:'Посещаемость %',l:'Дисциплина'},{v:'Кейсов/мес',l:'Для маркетинга'}],
+    impacts:[{d:'Маркетинг',t:'Кейсы и отзывы для контента и рекламы'},{d:'Продажи',t:'Довольные студенты — источник рекомендаций'},{d:'Customer Success',t:'Данные о прогрессе и зонах риска'},{d:'Руководство',t:'Репутация школы через результаты студентов'}],
+  },
+      id:'admin', icon:'🏢', label:'Администрация',
+    title:'Производственная линия · Администрация',
+    sub:'Оффлайн точка · Администратор',
+    tags:['1 сотрудник','Оффлайн'],
+    inputTitle:'Расписание занятий + список студентов',
+    inputSub:'Актуальные данные от Академии: кто приходит, когда, в какую аудиторию',
+    outputTitle:'Комфортная и организованная оффлайн точка',
+    outputSub:'Студенты встречены, записи актуальны, порядок обеспечен — без сбоев',
+    team:[
+      {i:'АДМ',name:'Администратор',ckp:'Организованная оффлайн точка с актуальными записями и встреченными клиентами без жалоб'},
+    ],
+    stages:[
+      {n:1,name:'Подготовка к рабочему дню',product:'Готовая к приёму клиентов оффлайн точка',role:'Администратор',deadline:'За 30 минут до первого занятия',tasks:['Проверка чистоты и порядка в офисе','Проверка оборудования (проекторы, Wi-Fi, кондиционер)','Сверка расписания на день','Подготовка зон ожидания и ресепшена'],metrics:['Офис открыт за 30 мин до занятия','Оборудование работает','Расписание актуально']},
+      {n:2,name:'Встреча и регистрация клиентов',product:'Зарегистрированный и размещённый клиент',role:'Администратор',deadline:'В момент прихода клиента',tasks:['Встреча студентов и гостей','Сверка по списку записей','Направление в нужную аудиторию','Ответы на первичные вопросы клиентов','Запись новых обращений на тестирование'],metrics:['Каждый клиент встречен','Все направлены в нужную аудиторию','Жалоб на встречу нет']},
+      {n:3,name:'Ведение записей и базы клиентов',product:'Актуальная база записей на тесты и занятия',role:'Администратор',deadline:'В режиме реального времени',tasks:['Запись входящих обращений на тестирование','Внесение данных в CRM / таблицу','Подтверждение записей (звонок/сообщение)','Напоминание клиентам за день до визита'],metrics:['Все записи внесены в день обращения','Подтверждение отправлено','Напоминания разосланы']},
+      {n:4,name:'Поддержание порядка и сервиса',product:'Комфортная среда на протяжении всего рабочего дня',role:'Администратор',deadline:'Непрерывно',tasks:['Контроль чистоты зон ожидания','Чай/кофе для ожидающих клиентов','Оперативное решение мелких технических вопросов','Фиксация нестандартных ситуаций'],metrics:['Нет жалоб на сервис','Зоны ожидания в порядке','Нештатные ситуации зафиксированы']},
+      {n:5,name:'Закрытие дня и отчётность',product:'Отчёт по посещаемости и записям за день',role:'Администратор',deadline:'После последнего занятия',tasks:['Сверка фактической посещаемости с планом','Передача данных о новых записях в продажи','Проверка и закрытие офиса','Отчёт руководству при отклонениях'],metrics:['Отчёт за день сформирован','Новые записи переданы в продажи','Офис закрыт по регламенту']},
+    ],
+    chain:['Расписание','Готовый офис','Встреченный клиент','Актуальные записи','Порядок и сервис','Отчёт за день'],
+    bns:[
+      {t:'Записи не вносятся в CRM',tx:'Администратор записывает в блокнот → продажи не видят заявки вовремя.'},
+      {t:'Нет напоминаний клиентам',tx:'Клиенты забывают о записи → пустые аудитории и недовольные преподаватели.'},
+      {t:'Технические сбои',tx:'Оборудование не проверяется утром → срыв занятия в начале дня.'},
+    ],
+    kpis:[{v:'Жалобы',l:'На сервис/месяц'},{v:'Записи в CRM',l:'% внесённых'},{v:'Явка %',l:'От записавшихся'},{v:'Напоминания',l:'% отправленных'},{v:'Открытие',l:'Вовремя (дней/мес)'},{v:'Новые заявки',l:'Записей/день'}],
+    impacts:[{d:'Продажи',t:'Записи на тест — новые лиды для менеджеров'},{d:'Академия',t:'Данные о посещаемости и нештатных ситуациях'},{d:'Студенты',t:'Первое впечатление о компании формирует администратор'},{d:'Руководство',t:'Порядок и сервис на оффлайн точке'}],
   },
   {
-    n:3,
-    name:"Создание визуала",
-    product:"Визуальные материалы: посты, Stories, креативы для рекламы",
-    role:"Дизайнер",
-    deadline:"За 2–3 дня до публикации",
-    tasks:[
-      "Дизайн постов по брендбуку и ТЗ от маркетолога/СММ",
-      "Создание Stories и Reels-обложек",
-      "Разработка рекламных креативов (статика + анимация)",
-      "Адаптация материалов под форматы Instagram",
-      "Сдача файлов в нужных размерах и форматах"
+    id:'hr', icon:'👥', label:'HR',
+    title:'Производственная линия · HR-отдел Embassy',
+    sub:'От передачи сотрудника из рекрутинга до стабильной и продуктивной команды',
+    tags:['HR-менеджер','8 этапов','Адаптация + Удержание'],
+    inputTitle:'Сотрудник, успешно прошедший адаптационный месяц и допущенный к оформлению',
+    inputSub:'Кандидат прошёл отбор, подтверждён руководителем отдела, готов к официальному оформлению',
+    outputTitle:'Продуктивная, стабильная команда компании',
+    outputSub:'Команда работает по понятным правилам с минимальным уровнем контролируемой текучести кадров',
+    team:[
+      {i:'HR',name:'HR-менеджер / Рекрутер',ckp:'Адаптированный и вовлечённый сотрудник, работающий по стандартам компании в установленный срок'},
     ],
-    metrics:["Соответствие брендбуку","Все форматы Instagram соблюдены","Сдано в срок без правок руководителя"]
+    stages:[
+      {n:1,name:'Адаптация и контроль первого месяца',product:'Сотрудник, подтвердивший квалификацию и допущенный к оформлению',role:'HR-менеджер + Руководитель отдела',deadline:'30 дней',tasks:['Разработка плана адаптации','Welcome-встреча','Контроль результатов 2-й недели','Подведение итогов месяца','Принятие решения по сотруднику'],metrics:['План адаптации выполнен','Welcome-встреча проведена','Решение принято в срок']},
+      {n:2,name:'Кадровое оформление (КДП)',product:'Официально оформленный сотрудник',role:'HR-менеджер',deadline:'1–3 дня',tasks:['Сбор документов','Определение формата трудоустройства','Подписание договоров и внутренних актов','Регистрация на Enbek.kz','Формирование личного дела'],metrics:['Все документы собраны','Договор подписан','Зарегистрирован на Enbek.kz','Личное дело сформировано']},
+      {n:3,name:'Поддержание вовлечённости и удержание',product:'Удержанный и вовлечённый сотрудник',role:'HR-менеджер',deadline:'Постоянно',tasks:['One-to-one встречи (1 на 1)','Замер eNPS и лояльности','Выявление рисков увольнения','Разрешение конфликтных ситуаций'],metrics:['eNPS выше целевого','Встречи 1:1 проводятся регулярно','Риски выявлены и отработаны']},
+      {n:4,name:'Системное обучение и развитие (L&D)',product:'Сотрудник с повышенной квалификацией',role:'HR-менеджер + Руководители отделов',deadline:'Ежемесячно',tasks:['Выявление потребностей в обучении','Актуализация и наполнение базы знаний','Организация учебного процесса','Контроль развития сотрудников'],metrics:['% прохождения обучения','Уровень квалификации вырос','База знаний актуальна']},
+      {n:5,name:'Участие во встречах и контроль стандартов',product:'Сотрудник, работающий по стандартам компании',role:'HR-менеджер',deadline:'Постоянно',tasks:['Участие в собраниях и планёрках','Контроль соблюдения регламентов и стандартов','Проведение дисциплинарных встреч','Сбор организационной обратной связи'],metrics:['Стандарты соблюдаются','Дисциплинарных нарушений минимум','Обратная связь собрана']},
+      {n:6,name:'Управление корпоративной культурой',product:'Лояльный сотрудник, вовлечённый в корпоративную культуру',role:'HR-менеджер',deadline:'Постоянно',tasks:['Управление календарём праздников и дней рождения','Организация корпоративных мероприятий и тимбилдингов','Внутренний PR и трансляция ценностей компании'],metrics:['Мероприятия проводятся по плану','eNPS растёт','Ценности транслируются']},
+      {n:7,name:'Оценка эффективности и управление карьерой',product:'Сотрудник с понятным карьерным треком и перспективами',role:'HR-менеджер + Руководители',deadline:'Каждые 6–12 месяцев',tasks:['Участие в аудите KPI','Проведение аттестаций (Review)','Формирование кадрового резерва','Индивидуальные планы развития (ИПР)'],metrics:['Аттестации проведены в срок','ИПР составлен для каждого','Кадровый резерв сформирован']},
+      {n:8,name:'Управление увольнениями и аналитика',product:'Аналитический отчёт по текучести с рекомендациями по улучшению найма',role:'HR-менеджер',deadline:'По факту увольнения',tasks:['Проведение Exit-интервью','Анализ причин увольнений','Аналитика текучести','Передача данных в рекрутинг для улучшения найма'],metrics:['Exit-интервью проведено','Причины зафиксированы','Рекомендации переданы в рекрутинг']},
+    ],
+    chain:['Сотрудник после адаптации','Допущен к оформлению','Официально оформлен','Вовлечённый сотрудник','Развивающийся сотрудник','Работающий по стандартам','Лояльный сотрудник','Сотрудник с карьерным планом','Стабильная продуктивная команда'],
+    bns:[
+      {t:'Нет системы онбординга',tx:'Новичок предоставлен сам себе → стресс, ошибки, ранний уход.'},
+      {t:'eNPS не замеряется',tx:'HR не видит риски увольнения заранее → внезапные уходы ключевых сотрудников.'},
+      {t:'L&D без системы',tx:'Обучение хаотично, нет базы знаний → одни и те же ошибки в команде повторяются.'},
+    ],
+    kpis:[{v:'Текучесть %',l:'Персонал'},{v:'eNPS',l:'Индекс лояльности'},{v:'% адаптации',l:'Прошли успешно'},{v:'Ср. срок работы',l:'В компании'},{v:'Внутр. повышения',l:'Количество'},{v:'Укомплектованность',l:'Штат'}],
+    impacts:[{d:'Все отделы',t:'Укомплектованные команды, работающие по стандартам'},{d:'Академия',t:'Квалифицированные преподаватели с ИПР'},{d:'Продажи',t:'Обученные менеджеры, знающие продукт'},{d:'Руководство',t:'Данные о текучести и стабильности команды'}],
   },
-  {
-    n:4,
-    name:"Публикация и ведение Instagram",
-    product:"Опубликованный контент с настроенным взаимодействием",
-    role:"СММ-специалист",
-    deadline:"По контент-плану, ежедневно",
-    tasks:[
-      "Публикация постов, Stories, Reels по расписанию",
-      "Ответы на комментарии и сообщения в директ",
-      "Обработка входящих заявок из Direct — передача в продажи",
-      "Проведение активаций: опросы, голосования, вопросы",
-      "Мониторинг упоминаний и репутации"
+      id:'finance', icon:'💰', label:'Финансы',
+    title:'Производственная линия · Финансы',
+    sub:'Учёт и отчётность · Финансовый менеджер + Бухгалтерия (аутсорс)',
+    tags:['1 + аутсорс','Учёт + Отчётность'],
+    inputTitle:'Данные об оплатах, расходах и операциях из всех отделов',
+    inputSub:'Чеки, договоры, акты, данные CRM — от продаж, администрации, руководства',
+    outputTitle:'Финансовая отчётность с управленческими выводами',
+    outputSub:'Актуальная картина P&L, кассы и бюджетов — для принятия решений руководством',
+    team:[
+      {i:'ФМ',name:'Финансовый менеджер',ckp:'Актуальная управленческая отчётность с выводами, переданная руководству в срок'},
+      {i:'БУХ',name:'Бухгалтерия (аутсорс)',ckp:'Сданная налоговая отчётность и закрытые первичные документы без штрафов'},
     ],
-    metrics:["Выход контента строго по плану","Ответ в директ < 30 минут","Вовлечённость (ER) не ниже benchmark"]
+    stages:[
+      {n:1,name:'Сбор финансовых данных',product:'Сводная таблица всех поступлений и расходов за период',role:'Финансовый менеджер',deadline:'Ежедневно / еженедельно',tasks:['Сбор данных об оплатах из CRM','Фиксация расходов по всем статьям','Сверка с банковской выпиской','Запрос закрывающих документов от контрагентов','Контроль дебиторской задолженности'],metrics:['Все поступления внесены в день оплаты','Расходы зафиксированы с документом','Расхождений с банком нет']},
+      {n:2,name:'Ведение управленческого учёта',product:'Актуальная таблица P&L и движения денежных средств',role:'Финансовый менеджер',deadline:'Еженедельно',tasks:['Ведение P&L (доходы минус расходы)','Учёт движения денежных средств (ДДС)','Контроль бюджетов по отделам','Расчёт unit-экономики по продуктам (оффлайн/онлайн)','Прогноз кассовых разрывов'],metrics:['P&L актуален на текущую дату','ДДС ведётся без задержек','Прогноз разрывов составлен']},
+      {n:3,name:'Контроль бюджетов и расходов',product:'Отчёт об исполнении бюджета с отклонениями',role:'Финансовый менеджер',deadline:'Ежемесячно',tasks:['Сравнение план/факт по каждому отделу','Выявление перерасходов и их причин','Согласование внеплановых расходов','Рекомендации по оптимизации затрат'],metrics:['Отклонения выявлены и объяснены','Перерасходы согласованы','Рекомендации даны руководству']},
+      {n:4,name:'Взаимодействие с бухгалтерией (аутсорс)',product:'Закрытые первичные документы и сданная отчётность',role:'Финансовый менеджер + Бухгалтерия',deadline:'По регламенту налогового календаря',tasks:['Передача первичных документов в бухгалтерию','Контроль сроков сдачи отчётности','Ответы на запросы бухгалтерии','Проверка начисленных налогов','Контроль оплаты налогов и сборов'],metrics:['Документы переданы в срок','Отчётность сдана без штрафов','Налоги оплачены вовремя']},
+      {n:5,name:'Управленческая отчётность для руководства',product:'Управленческий отчёт с выводами и прогнозом',role:'Финансовый менеджер',deadline:'Еженедельно + итог месяца',tasks:['Подготовка дашборда: выручка, расходы, прибыль','Анализ динамики по отношению к прошлому периоду','Расчёт ROI по маркетингу и продуктам','Прогноз на следующий период','Презентация отчёта руководству'],metrics:['Отчёт сдан в установленный день','Выводы сформулированы, а не только цифры','Прогноз на следующий период есть']},
+    ],
+    chain:['Данные из CRM','Сводка поступлений','P&L и ДДС','Исполнение бюджета','Закрытые документы','Управленческий отчёт'],
+    bns:[
+      {t:'Данные приходят с опозданием',tx:'Продажи не вносят оплаты в CRM вовремя → финансист работает с неактуальной картиной.'},
+      {t:'Нет P&L в реальном времени',tx:'Руководство принимает решения без понимания текущей прибыли.'},
+      {t:'Первичка не собирается',tx:'Документы от контрагентов не запрашиваются → проблемы с бухгалтерией и налоговой.'},
+    ],
+    kpis:[{v:'Выручка/мес',l:'Факт vs план'},{v:'Чистая прибыль',l:'За период'},{v:'Расходы/выручка',l:'% затрат'},{v:'Дебиторка ₸',l:'Задолженность'},{v:'Кассовый остаток',l:'На конец недели'},{v:'ROI маркетинга',l:'% возврата'}],
+    impacts:[{d:'Руководство',t:'Актуальная P&L для стратегических решений'},{d:'Маркетинг',t:'Данные по ROI каналов для оптимизации бюджета'},{d:'Продажи',t:'Контроль поступления оплат и дебиторки'},{d:'Все отделы',t:'Лимиты бюджетов по статьям расходов'}],
   },
-  {
-    n:5,
-    name:"Запуск и ведение таргетированной рекламы",
-    product:"Активные рекламные кампании с заявками",
-    role:"Таргетолог",
-    deadline:"Запуск — 1–2 дня; ведение — ежедневно",
-    tasks:[
-      "Настройка аудиторий, плейсментов и целей кампаний",
-      "Запуск рекламных объявлений на базе готовых креативов",
-      "Ежедневный мониторинг и оптимизация (CPL, CTR, бюджет)",
-      "A/B-тестирование креативов и аудиторий",
-      "Передача лидов из Lead Ads в CRM / менеджеру продаж"
-    ],
-    metrics:["CPL не превышает плановый","Бюджет расходуется равномерно","Заявки передаются в продажи в тот же день"]
-  },
-  {
-    n:6,
-    name:"Анализ результатов и отчётность",
-    product:"Еженедельный отчёт по заявкам и эффективности",
-    role:"Маркетолог + Руководитель отдела маркетинга",
-    deadline:"Каждый понедельник + итог месяца",
-    tasks:[
-      "Сбор данных: заявки, охват, CPL, ER, расход бюджета",
-      "Анализ эффективности по каналам (таргет vs органика)",
-      "Выводы: что сработало, что отключить, что масштабировать",
-      "Подготовка отчёта для руководства компании",
-      "Корректировка плана на следующий период"
-    ],
-    metrics:["Еженедельный отчёт сдан в срок","ROI и CPL рассчитаны по каждому каналу","Есть конкретные решения, а не просто цифры"]
-  }
 ];
 
-const chain=["Бизнес-цели","Контент-план + медиаплан","Тексты","Визуалы","Опубликованный контент","Рекламные кампании","Заявки в продажи"];
+// ── BUILD UI ──────────────────────────────────────────────────────────────────
+const tabBar = document.getElementById('tab-bar');
+const pagesEl = document.getElementById('pages');
 
-const bns=[
-  {t:"Этап 2–3: Тексты без ТЗ",tx:"СММ пишет тексты без брифа от маркетолога. Дизайнер получает задачу в последний момент — срыв дедлайнов."},
-  {t:"Этап 4: Директ без регламента",tx:"Заявки из Direct теряются или обрабатываются с опозданием. Нет чёткой передачи в продажи."},
-  {t:"Этап 5: Кампании без свежих креативов",tx:"Таргетолог запускает рекламу на устаревшие материалы из-за задержки дизайнера. CTR падает."},
-  {t:"Этап 6: Отчёт ради отчёта",tx:"Цифры собираются, но решения по ним не принимаются. Неэффективные форматы продолжают жить."},
-];
+function buildPipeline(stages, containerId) {
+  const container = document.getElementById(containerId);
+  stages.forEach((s, i) => {
+    const spine = document.createElement('div'); spine.className = 'pipe-spine';
+    const node = document.createElement('div'); node.className = 'spine-node'; node.textContent = s.n;
+    const line = document.createElement('div'); line.className = 'spine-line' + (i === stages.length - 1 ? ' last' : '');
+    spine.append(node, line);
 
-const kpis=[
-  {v:"Заявки/мес",l:"Основной KPI"},
-  {v:"CPL (₽)",l:"Стоимость заявки"},
-  {v:"CTR %",l:"Кликабельность рекламы"},
-  {v:"ER %",l:"Вовлечённость постов"},
-  {v:"Охват/мес",l:"Органика + таргет"},
-  {v:"CR директ→заявка",l:"Конверсия из переписки"},
-];
+    const wrap = document.createElement('div'); wrap.className = 'stage-wrap';
+    const card = document.createElement('div'); card.className = 'stage-card';
+    card.innerHTML = `
+      <div class="stage-head">
+        <div class="sh-text">
+          <div class="sh-name" contenteditable="true" onclick="event.stopPropagation()">${s.name}</div>
+          <div class="sh-product">→ <span contenteditable="true" onclick="event.stopPropagation()">${s.product}</span></div>
+        </div>
+        <div class="sh-meta">
+          <span class="role-pill" contenteditable="true" onclick="event.stopPropagation()">${s.role}</span>
+          <span class="sh-chev">▾</span>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="tasks-col">
+          <div class="col-lbl">Задачи</div>
+          ${s.tasks.map(t => `<div class="task-item"><span contenteditable="true" onclick="event.stopPropagation()">${t}</span></div>`).join('')}
+        </div>
+        <div class="meta-row-wrap">
+          <div class="meta-item">
+            <div class="meta-lbl">Ответственный</div>
+            <div class="meta-val" contenteditable="true" onclick="event.stopPropagation()">${s.role}</div>
+          </div>
+          <div class="meta-item">
+            <div class="meta-lbl">Срок</div>
+            <div class="meta-val" contenteditable="true" onclick="event.stopPropagation()">${s.deadline}</div>
+          </div>
+          <div class="meta-item" style="grid-column:1/-1">
+            <div class="meta-lbl">Продукт (ЦКП этапа)</div>
+            <div class="product-chip" contenteditable="true" onclick="event.stopPropagation()">${s.product}</div>
+          </div>
+        </div>
+        <div class="metrics-col">
+          <div class="col-lbl">Метрики качества</div>
+          <div class="metric-pills">${s.metrics.map(m => `<span class="metric-pill" contenteditable="true">${m}</span>`).join('')}</div>
+        </div>
+      </div>`;
+    card.querySelector('.stage-head').addEventListener('click', () => {
+      const was = card.classList.contains('open');
+      container.querySelectorAll('.stage-card').forEach(c => c.classList.remove('open'));
+      if (!was) card.classList.add('open');
+    });
+    wrap.appendChild(card);
+    container.append(spine, wrap);
+  });
+}
 
-const impacts=[
-  {d:"Продажи",t:"Получают поток заявок из директа и таргета с контекстом переписки"},
-  {d:"Руководство",t:"Видят ROI маркетинга в разрезе каналов — таргет vs органика"},
-  {d:"Продукт / услуга",t:"Получают обратную связь: что зашло аудитории, что вызывает вопросы"},
-  {d:"HR",t:"Используют Instagram-контент для найма и формирования образа работодателя"},
-];
+DEPTS.forEach((d, di) => {
+  // Tab button
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn' + (di === 0 ? ' active' : '');
+  btn.innerHTML = `<span class="tab-icon">${d.icon}</span><span class="tab-label">${d.label}</span>`;
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('page-' + d.id).classList.add('active');
+    window.scrollTo(0, 0);
+  });
+  tabBar.appendChild(btn);
 
-const teamStrip=document.getElementById('team-strip');
-team.forEach(m=>{
-  teamStrip.innerHTML+=`<div class="team-card">
-    <div class="team-avatar">${m.initials}</div>
-    <div>
-      <div class="team-name" contenteditable="true" onclick="event.stopPropagation()">${m.name}</div>
-      <div class="team-ckp" contenteditable="true" onclick="event.stopPropagation()">ЦКП: ${m.ckp}</div>
+  // Page
+  const page = document.createElement('div');
+  page.className = 'page' + (di === 0 ? ' active' : '');
+  page.id = 'page-' + d.id;
+  page.innerHTML = `
+    <div class="page-header">
+      <h1 contenteditable="true">${d.title}</h1>
+      <p contenteditable="true">${d.sub}</p>
+      <div class="top-tags">${d.tags.map((t,i)=>`<span class="tag${i===0?' accent':''}">${t}</span>`).join('')}</div>
     </div>
-  </div>`;
-});
+    <div class="edit-hint">✏ Нажмите на текст для редактирования</div>
 
-const pipe=document.getElementById('pipeline');
-S.forEach((s,i)=>{
-  const spine=document.createElement('div');spine.className='pipe-spine';
-  const node=document.createElement('div');node.className='spine-node';node.textContent=s.n;
-  const line=document.createElement('div');line.className='spine-line'+(i===S.length-1?' last':'');
-  spine.append(node,line);
+    <div class="div-label"><span>Команда и ЦКП</span></div>
+    <div class="team-strip" id="team-${d.id}"></div>
 
-  const wrap=document.createElement('div');wrap.className='stage-wrap';
-  const card=document.createElement('div');card.className='stage-card';
-  card.innerHTML=`
-    <div class="stage-head">
-      <div class="sh-text">
-        <div class="sh-name" contenteditable="true" onclick="event.stopPropagation()">${s.name}</div>
-        <div class="sh-product">→ <span contenteditable="true" onclick="event.stopPropagation()">${s.product}</span></div>
+    <div class="div-label"><span>Производственная линия</span></div>
+    <div class="in-out">
+      <div class="io-side">
+        <div class="io-lbl">Входящий продукт</div>
+        <div class="io-title" contenteditable="true"><span class="io-dot" style="background:var(--accent)"></span>${d.inputTitle}</div>
+        <div class="io-sub" contenteditable="true">${d.inputSub}</div>
       </div>
-      <div class="sh-meta">
-        <span class="role-pill" contenteditable="true" onclick="event.stopPropagation()">${s.role}</span>
-        <span class="sh-chev">▾</span>
+      <div class="io-div"></div>
+      <div class="io-side">
+        <div class="io-lbl">Конечный продукт (ЦКП отдела)</div>
+        <div class="io-title" contenteditable="true"><span class="io-dot" style="background:var(--teal)"></span>${d.outputTitle}</div>
+        <div class="io-sub" contenteditable="true">${d.outputSub}</div>
       </div>
     </div>
-    <div class="stage-body">
-      <div class="tasks-col">
-        <div class="col-lbl">Задачи</div>
-        ${s.tasks.map(t=>`<div class="task-item"><span contenteditable="true" onclick="event.stopPropagation()">${t}</span></div>`).join('')}
+
+    <div class="pipeline" id="pipe-${d.id}"></div>
+
+    <div class="div-label"><span>Цепочка продуктов</span></div>
+    <div class="chain-scroll" id="chain-${d.id}" style="margin-bottom:1.25rem"></div>
+
+    <div class="div-label"><span>Аналитика</span></div>
+    <div class="bottom">
+      <div class="panel">
+        <div class="panel-head"><div class="panel-icon pi-amber">⚡</div><div class="panel-title">Узкие места</div></div>
+        <div id="bn-${d.id}"></div>
       </div>
-      <div class="meta-col">
-        <div class="meta-row">
-          <div class="meta-lbl">Ответственный</div>
-          <div class="meta-val" contenteditable="true" onclick="event.stopPropagation()">${s.role}</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-lbl">Срок</div>
-          <div class="meta-val" contenteditable="true" onclick="event.stopPropagation()">${s.deadline}</div>
-        </div>
-        <div class="meta-row">
-          <div class="meta-lbl">Продукт (ЦКП этапа)</div>
-          <div class="product-chip" contenteditable="true" onclick="event.stopPropagation()">${s.product}</div>
-        </div>
+      <div class="panel">
+        <div class="panel-head"><div class="panel-icon pi-teal">📊</div><div class="panel-title">Ключевые метрики</div></div>
+        <div class="kpi-grid" id="kpi-${d.id}"></div>
       </div>
-      <div class="metrics-col">
-        <div class="col-lbl">Метрики качества продукта</div>
-        <div class="metric-pills">${s.metrics.map(m=>`<span class="metric-pill" contenteditable="true">${m}</span>`).join('')}</div>
+      <div class="panel full-col">
+        <div class="panel-head"><div class="panel-icon pi-coral">🔗</div><div class="panel-title">Влияние на другие подразделения</div></div>
+        <div id="imp-${d.id}" style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;"></div>
       </div>
     </div>`;
-  card.querySelector('.stage-head').addEventListener('click',()=>{
-    const was=card.classList.contains('open');
-    document.querySelectorAll('.stage-card').forEach(c=>c.classList.remove('open'));
-    if(!was)card.classList.add('open');
+  pagesEl.appendChild(page);
+
+  // Team
+  const teamEl = document.getElementById('team-' + d.id);
+  d.team.forEach(m => {
+    teamEl.innerHTML += `<div class="team-card">
+      <div class="team-avatar">${m.i}</div>
+      <div>
+        <div class="team-name" contenteditable="true">${m.name}</div>
+        <div class="team-ckp" contenteditable="true">ЦКП: ${m.ckp}</div>
+      </div>
+    </div>`;
   });
-  wrap.appendChild(card);
-  pipe.append(spine,wrap);
-});
 
-const chainEl=document.getElementById('chain');
-chain.forEach((p,i)=>{
-  const el=document.createElement('span');
-  el.className='chain-step'+(i===0?' first':i===chain.length-1?' last':'');
-  el.setAttribute('contenteditable','true');
-  el.textContent=p;
-  chainEl.appendChild(el);
-  if(i<chain.length-1){const a=document.createElement('span');a.className='chain-arr';a.textContent='→';chainEl.appendChild(a);}
-});
+  // Pipeline
+  buildPipeline(d.stages, 'pipe-' + d.id);
 
-const bnEl=document.getElementById('bn');
-bns.forEach(b=>{bnEl.innerHTML+=`<div class="bn-item"><div class="bn-bar"></div><div><div class="bn-title" contenteditable="true">${b.t}</div><div class="bn-text" contenteditable="true">${b.tx}</div></div></div>`;});
-
-const kpiEl=document.getElementById('kpis');
-kpis.forEach(k=>{kpiEl.innerHTML+=`<div class="kpi-cell"><div class="kpi-val" contenteditable="true">${k.v}</div><div class="kpi-lbl" contenteditable="true">${k.l}</div></div>`;});
-
-const impEl=document.getElementById('impact');
-impacts.forEach(imp=>{impEl.innerHTML+=`<div class="imp-item"><span class="imp-dept" contenteditable="true">${imp.d}</span><span class="imp-text" contenteditable="true">${imp.t}</span></div>`;});
-</script>
-
-<button id="pwa-banner" style="display:none">
-  <span class="pwa-icon">📲</span>
-  Установить как приложение
-  <button class="pwa-close" id="pwa-close" aria-label="Закрыть">×</button>
-</button>
-<script>
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
-let deferredPrompt;
-const banner = document.getElementById('pwa-banner');
-const closeBtn = document.getElementById('pwa-close');
-
-window.addEventListener('beforeinstallprompt', e => {
-  e.preventDefault();
-  deferredPrompt = e;
-  banner.style.display = 'flex';
-});
-
-banner.addEventListener('click', async () => {
-  if(!deferredPrompt) return;
-  deferredPrompt.prompt();
-  const {outcome} = await deferredPrompt.userChoice;
-  deferredPrompt = null;
-  banner.style.display = 'none';
-});
-
-closeBtn.addEventListener('click', e => {
-  e.stopPropagation();
-  banner.style.display = 'none';
-});
-
-window.addEventListener('appinstalled', () => {
-  banner.style.display = 'none';
-});
-</script>
-
-<script>
-// Сохранение правок в localStorage
-const STORE_KEY = 'mpl-edits-v1';
-
-function saveAll() {
-  const data = {};
-  document.querySelectorAll('[contenteditable]').forEach((el, i) => {
-    const key = el.dataset.sid || ('el-' + i);
-    data[key] = el.innerHTML;
+  // Chain
+  const chainEl = document.getElementById('chain-' + d.id);
+  d.chain.forEach((p, i) => {
+    const el = document.createElement('span');
+    el.className = 'chain-step' + (i === 0 ? ' first' : i === d.chain.length - 1 ? ' last' : '');
+    el.setAttribute('contenteditable', 'true');
+    el.textContent = p;
+    chainEl.appendChild(el);
+    if (i < d.chain.length - 1) { const a = document.createElement('span'); a.className = 'chain-arr'; a.textContent = '→'; chainEl.appendChild(a); }
   });
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch(e){}
-}
 
+  // Bottlenecks
+  const bnEl = document.getElementById('bn-' + d.id);
+  d.bns.forEach(b => { bnEl.innerHTML += `<div class="bn-item"><div class="bn-bar"></div><div><div class="bn-title" contenteditable="true">${b.t}</div><div class="bn-text" contenteditable="true">${b.tx}</div></div></div>`; });
+
+  // KPIs
+  const kpiEl = document.getElementById('kpi-' + d.id);
+  d.kpis.forEach(k => { kpiEl.innerHTML += `<div class="kpi-cell"><div class="kpi-val" contenteditable="true">${k.v}</div><div class="kpi-lbl" contenteditable="true">${k.l}</div></div>`; });
+
+  // Impact
+  const impEl = document.getElementById('imp-' + d.id);
+  d.impacts.forEach(imp => { impEl.innerHTML += `<div class="imp-item"><span class="imp-dept" contenteditable="true">${imp.d}</span><span class="imp-text" contenteditable="true">${imp.t}</span></div>`; });
+});
+
+// ── LOCALSTORAGE SAVE ─────────────────────────────────────────────────────────
 function assignIds() {
   document.querySelectorAll('[contenteditable]').forEach((el, i) => {
     if (!el.dataset.sid) el.dataset.sid = 'el-' + i;
   });
 }
-
+function saveAll() {
+  const data = {};
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    if (el.dataset.sid) data[el.dataset.sid] = el.innerHTML;
+  });
+  try { localStorage.setItem(STORE, JSON.stringify(data)); } catch(e) {}
+}
 function loadAll() {
   let data;
-  try { data = JSON.parse(localStorage.getItem(STORE_KEY) || 'null'); } catch(e){ return; }
+  try { data = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch(e) { return; }
   if (!data) return;
-  document.querySelectorAll('[contenteditable]').forEach((el, i) => {
-    const key = el.dataset.sid || ('el-' + i);
-    if (data[key] !== undefined) el.innerHTML = data[key];
+  document.querySelectorAll('[contenteditable]').forEach(el => {
+    if (el.dataset.sid && data[el.dataset.sid] !== undefined) el.innerHTML = data[el.dataset.sid];
   });
 }
-
 function showToast(msg) {
-  let t = document.getElementById('save-toast');
+  let t = document.getElementById('sv-toast');
   if (!t) {
-    t = document.createElement('div');
-    t.id = 'save-toast';
-    t.style.cssText = 'position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(10px);background:#1a1918;color:#fff;font-size:13px;padding:8px 18px;border-radius:20px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;font-family:-apple-system,sans-serif;white-space:nowrap;';
+    t = document.createElement('div'); t.id = 'sv-toast';
+    t.style.cssText = 'position:fixed;bottom:4.5rem;left:50%;transform:translateX(-50%) translateY(8px);background:#1a1918;color:#fff;font-size:12px;padding:7px 16px;border-radius:20px;opacity:0;transition:opacity 0.2s,transform 0.2s;pointer-events:none;z-index:9999;font-family:-apple-system,sans-serif;white-space:nowrap;';
     document.body.appendChild(t);
   }
   t.textContent = msg;
-  t.style.opacity = '1';
-  t.style.transform = 'translateX(-50%) translateY(0)';
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => {
-    t.style.opacity = '0';
-    t.style.transform = 'translateX(-50%) translateY(10px)';
-  }, 1800);
+  t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)';
+  clearTimeout(t._t);
+  t._t = setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translateX(-50%) translateY(8px)'; }, 1800);
 }
-
-// Кнопка сброса
-function addResetBtn() {
-  const btn = document.createElement('button');
-  btn.textContent = '↺ Сбросить правки';
-  btn.style.cssText = 'position:fixed;top:1rem;right:1rem;z-index:999;font-size:12px;background:none;border:0.5px solid rgba(0,0,0,0.15);border-radius:20px;padding:5px 12px;cursor:pointer;color:#a8a59e;font-family:-apple-system,sans-serif;';
-  btn.addEventListener('click', () => {
-    if (confirm('Сбросить все правки и вернуть оригинал?')) {
-      localStorage.removeItem(STORE_KEY);
-      location.reload();
-    }
-  });
-  document.body.appendChild(btn);
+function resetData() {
+  if (confirm('Сбросить все правки и вернуть оригинал?')) {
+    localStorage.removeItem(STORE); location.reload();
+  }
 }
-
-// Автосохранение через 1 сек после последней правки
 let saveTimer;
 document.addEventListener('input', e => {
   if (e.target.getAttribute('contenteditable')) {
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      saveAll();
-      showToast('✓ Сохранено');
-    }, 1000);
+    saveTimer = setTimeout(() => { saveAll(); showToast('✓ Сохранено'); }, 1000);
   }
 });
+window.addEventListener('load', () => { assignIds(); loadAll(); });
 
-// Инициализация после рендера всего контента
-window.addEventListener('load', () => {
-  assignIds();
-  loadAll();
-  addResetBtn();
-});
+// ── SERVICE WORKER ────────────────────────────────────────────────────────────
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(() => {}); }
 </script>
-
 </body>
 </html>
