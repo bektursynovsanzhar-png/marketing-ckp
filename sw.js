@@ -1,4 +1,4 @@
-const CACHE = 'marketing-pl-v10';
+const CACHE = 'marketing-pl-v13';
 const FILES = ['./index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
@@ -17,8 +17,15 @@ self.addEventListener('activate', e => {
   self.clients.claim();
 });
 
+// Network-first: always try network, fallback to cache
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(r => r || fetch(e.request))
+    fetch(e.request)
+      .then(res => {
+        const clone = res.clone();
+        caches.open(CACHE).then(c => c.put(e.request, clone));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
