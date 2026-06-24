@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- ForcedBuild: 1782301809 OldBuild: 20260624-063524 -->
+<!-- ForcedBuild: 1782311617 OldBuild: 20260624-063524 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Embassy · Производственные линии</title>
 <link rel="manifest" href="manifest.json">
@@ -518,6 +518,29 @@ body.edit-mode .page-wrap{padding-top:calc(var(--top-h) + env(safe-area-inset-to
 .an-sc-amb .an-scs{color:#633806;}
 .an-sc-pur .an-scs{color:#3C3489;}
 .an-sc-cor .an-scs{color:#712B13;}
+
+
+.pf-wrap{margin-top:4px;}
+.pf-row{display:flex;align-items:center;gap:6px;margin-top:5px;}
+.pf-bar-bg{flex:1;height:3px;background:rgba(0,0,0,.08);border-radius:10px;overflow:hidden;}
+.pf-bar-fill{height:100%;border-radius:10px;transition:width .5s;max-width:100%;}
+.pf-teal .pf-bar-fill{background:#0F6E56;}
+.pf-amb .pf-bar-fill{background:#854F0B;}
+.pf-pur .pf-bar-fill{background:#534AB7;}
+.pf-cor .pf-bar-fill{background:#993C1D;}
+.pf-pct{font-size:10px;font-weight:600;min-width:32px;text-align:right;}
+.pf-teal .pf-pct{color:#0F6E56;}
+.pf-amb .pf-pct{color:#854F0B;}
+.pf-pur .pf-pct{color:#534AB7;}
+.pf-cor .pf-pct{color:#993C1D;}
+.pf-sub{font-size:10px;opacity:.6;margin-top:2px;}
+.pf-teal .pf-sub{color:#085041;}
+.pf-amb .pf-sub{color:#633806;}
+.pf-pur .pf-sub{color:#3C3489;}
+.pf-cor .pf-sub{color:#712B13;}
+.pf-over{opacity:.7;}
+.pf-warn .pf-pct{color:#993C1D!important;}
+.pf-warn .pf-bar-fill{background:#993C1D!important;}
 
 </style>
 </head>
@@ -1406,7 +1429,7 @@ document.addEventListener('input',e=>{
   if(e.target.getAttribute('contenteditable')) scheduleSave();
 });
 
-window.addEventListener('load',()=>{ initTheme(); loadAll(); });
+window.addEventListener('load',()=>{ initTheme(); loadAll(); loadPlansFromStorage(); });
 
 // ── EDIT MODE ─────────────────────────────────────────────────────────────
 let isEditMode = false;
@@ -1598,6 +1621,11 @@ function delItem(el){
 
 // ── ANALYTICS DASHBOARD ─────────────────────────────────────────────────────
 const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBjGb-y9H7EmhQmROSw2G3AT-BfAyZV04MmUtlJhVHJgXrwulW5x2G7WXgJFqwdYbVLwSHyImWwoNB/pub?output=csv';
+// Plans sheet URL — update gid after adding the plans tab to Google Sheets
+// To get gid: open the Plans tab in Google Sheets, look at URL ?gid=XXXXXXXX
+let PLANS_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBjGb-y9H7EmhQmROSw2G3AT-BfAyZV04MmUtlJhVHJgXrwulW5x2G7WXgJFqwdYbVLwSHyImWwoNB/pub?gid=1520046840&single=true&output=csv';
+let plansData = {};   // key → {monthly, daily}
+let plansLoaded = false;
 
 // Column mapping (0-based) matching Embassy Analytics Template
 const COL = {
@@ -1716,6 +1744,7 @@ async function fetchSheetData(forceRefresh=false){
     sheetRows = parseCSV(text);
     sheetLoaded = true;
     console.log('Loaded', sheetRows.length, 'rows from sheet');
+    if(!plansLoaded) fetchPlansData();
   } catch(e){
     sheetError = e.message;
     console.error('Sheet fetch error:', e);
@@ -1724,6 +1753,56 @@ async function fetchSheetData(forceRefresh=false){
   sheetLoading = false;
   renderAnalyticsLoading(false);
   renderAnalytics();
+}
+
+async function fetchPlansData(){
+  if(!PLANS_URL){ loadPlansFromStorage(); return; }
+  try{
+    const resp = await fetch(PLANS_URL + '&cachebust=' + Date.now(), {cache:'no-store'});
+    if(!resp.ok) throw new Error('plans HTTP '+resp.status);
+    const text = await resp.text();
+    parsePlansCSV(text);
+    savePlansToStorage();
+  } catch(e){
+    console.warn('Plans fetch failed, using stored:', e.message);
+    loadPlansFromStorage();
+  }
+}
+
+function parsePlansCSV(text){
+  const lines = text.trim().split('\n');
+  plansData = {};
+  for(let i=2; i<lines.length; i++){
+    const cells = lines[i].split(',').map(c=>c.replace(/"/g,'').trim());
+    const key = cells[1];
+    const monthly = parseFloat(cells[2])||0;
+    const daily = parseFloat(cells[3])||0;
+    if(key && monthly) plansData[key] = {monthly, daily};
+  }
+  plansLoaded = true;
+  console.log('Plans loaded:', Object.keys(plansData).length, 'items');
+}
+
+function savePlansToStorage(){
+  try{ localStorage.setItem('embassy-plans-v1', JSON.stringify(plansData)); }catch(e){}
+}
+function loadPlansFromStorage(){
+  try{
+    const raw = localStorage.getItem('embassy-plans-v1');
+    if(raw){ plansData = JSON.parse(raw); plansLoaded = true; }
+  }catch(e){}
+}
+
+function getPlan(key, days){
+  if(!plansData[key]) return null;
+  const {monthly, daily} = plansData[key];
+  // For period: scale monthly plan by days/30
+  return Math.round(monthly * days / 30);
+}
+
+function getPct(fact, plan){
+  if(!plan || plan===0) return null;
+  return Math.round(fact / plan * 100);
 }
 
 // ── DATE RANGE ───────────────────────────────────────────────────────────────
@@ -1794,99 +1873,157 @@ function renderAnalyticsLoading(loading){
 
 function renderAnalytics(){
   if(!sheetLoaded && !sheetError) return;
-
   const range = getDateRange();
   const rows = filterRows(range.from, range.to);
+  const days = Math.max(1, Math.round((range.to - range.from)/(1000*60*60*24))+1);
 
-  // Update period label
   setAEl('an-period-label', range.label);
-  setAEl('an-rows-count', rows.length + ' дн.');
+  setAEl('an-rows-count', rows.length + ' дн. · ' + days + ' дн. в периоде');
 
   if(!rows.length){
-    setAEl('an-no-data', 'Нет данных за выбранный период');
+    setAEl('an-no-data','Нет данных за выбранный период');
     document.getElementById('an-data-wrap')?.style.setProperty('display','none');
     return;
   }
   setAEl('an-no-data','');
   document.getElementById('an-data-wrap')?.style.setProperty('display','block');
 
+  // helper: render plan/fact/% into element
+  function pf(elId, fact, planKey, color, fmtFn){
+    const el = document.getElementById(elId);
+    if(!el) return;
+    const plan = getPlan(planKey, days);
+    const pct = plan ? getPct(fact, plan) : null;
+    const factStr = fmtFn ? fmtFn(fact) : fact;
+    const planStr = plan ? (fmtFn ? fmtFn(plan) : plan) : null;
+    const isOver = pct !== null && pct > 100;
+    const isWarn = pct !== null && pct < 60;
+    let html2 = `<div class="an-scv">${factStr}</div>`;
+    if(planStr){
+      const barW = Math.min(100, pct||0);
+      const cls = `pf-wrap pf-${color}${isWarn?' pf-warn':''}`;
+      html2 += `<div class="${cls}">
+        <div class="pf-row">
+          <div class="pf-bar-bg"><div class="pf-bar-fill" style="width:${barW}%"></div></div>
+          <span class="pf-pct">${pct!==null?pct+'%':'—'}</span>
+        </div>
+        <div class="pf-sub">план: ${planStr}</div>
+      </div>`;
+    }
+    el.innerHTML = html2;
+  }
+
   // ПРИХОД
   const revOff = sumField(rows,'rev_off');
   const revOnl = sumField(rows,'rev_onl');
   const revTotal = revOff + revOnl;
-  setAEl('an-rev-total', fmt(revTotal) + ' ₸');
-  setAEl('an-rev-off', fmt(revOff) + ' ₸');
-  setAEl('an-rev-onl', fmt(revOnl) + ' ₸');
-  const offPct = revTotal>0 ? Math.round(revOff/revTotal*100) : 0;
-  const onlPct = revTotal>0 ? Math.round(revOnl/revTotal*100) : 0;
+  setAEl('an-rev-total', fmt(revTotal)+' ₸');
+  setAEl('an-rev-off', fmt(revOff)+' ₸');
+  setAEl('an-rev-onl', fmt(revOnl)+' ₸');
+  const offPct = revTotal>0?Math.round(revOff/revTotal*100):0;
+  const onlPct = revTotal>0?Math.round(revOnl/revTotal*100):0;
   setAEl('an-rev-off-pct', offPct+'%');
   setAEl('an-rev-onl-pct', onlPct+'%');
-  const barOff = document.getElementById('an-bar-rev-off');
-  const barOnl = document.getElementById('an-bar-rev-onl');
-  if(barOff) barOff.style.width = offPct+'%';
-  if(barOnl) barOnl.style.width = onlPct+'%';
+  const bOff=document.getElementById('an-bar-rev-off'); if(bOff) bOff.style.width=offPct+'%';
+  const bOnl=document.getElementById('an-bar-rev-onl'); if(bOnl) bOnl.style.width=onlPct+'%';
+  // plan/fact for revenue in hero
+  const revPlan = getPlan('rev_total', days);
+  const revPct = revPlan ? getPct(revTotal, revPlan) : null;
+  const revPlanEl = document.getElementById('an-rev-plan');
+  if(revPlanEl && revPlan){
+    const barW = Math.min(100, revPct||0);
+    revPlanEl.innerHTML=`<div style="height:3px;background:rgba(255,255,255,.2);border-radius:10px;overflow:hidden;margin-top:8px"><div style="height:100%;background:#fff;border-radius:10px;width:${barW}%;transition:width .5s"></div></div><div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:rgba(255,255,255,.55)">план: ${fmt(revPlan)} ₸</span><span style="font-size:11px;font-weight:600;color:${revPct>=100?'#9FE1CB':'rgba(255,255,255,.9)'}">${revPct}%</span></div>`;
+  }
 
   // МАРКЕТИНГ
-  const leadsOff = sumField(rows,'leads_off');
-  const leadsOnl = sumField(rows,'leads_onl');
-  const leadsTotal = leadsOff + leadsOnl;
-  const spend = sumField(rows,'spend');
-  const cpl = leadsTotal>0 ? spend/leadsTotal : 0;
-  setAEl('an-leads-total', leadsTotal);
-  setAEl('an-leads-off', leadsOff);
-  setAEl('an-leads-onl', leadsOnl);
-  setAEl('an-spend', fmt(spend)+' ₸');
-  setAEl('an-cpl', fmt(cpl)+' ₸');
+  const leadsOff=sumField(rows,'leads_off'), leadsOnl=sumField(rows,'leads_onl');
+  const leadsTotal=leadsOff+leadsOnl;
+  const spend=sumField(rows,'spend');
+  const cpl=leadsTotal>0?spend/leadsTotal:0;
+  pf('an-leads-block', leadsTotal, 'leads_total', 'teal', v=>v);
+  pf('an-cpl-block', Math.round(cpl), 'cpl', 'teal', v=>fmt(v)+' ₸');
+  pf('an-spend-block', spend, 'spend', 'teal', v=>fmt(v)+' ₸');
+  const loEl=document.getElementById('an-leads-split');
+  if(loEl){
+    const loPlan=getPlan('leads_off',days), lonPlan=getPlan('leads_onl',days);
+    const loPct=loPlan?getPct(leadsOff,loPlan):null, lonPct=lonPlan?getPct(leadsOnl,lonPlan):null;
+    loEl.innerHTML=`<div class="an-scl">ОФФ / ОНЛ</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+        <span class="an-scv">${leadsOff}</span><span style="font-size:11px;color:#085041;opacity:.4">/</span><span class="an-scv">${leadsOnl}</span>
+      </div>
+      <div class="pf-wrap pf-teal"><div class="pf-sub">${loPct!==null?loPct+'%':'—'} / ${lonPct!==null?lonPct+'%':'—'}</div></div>`;
+  }
 
   // ПРОДАЖИ
-  const salesOff = sumField(rows,'sales_off');
-  const salesOnl = sumField(rows,'sales_onl');
-  const salesTotal = salesOff + salesOnl;
-  const avgOff = avgField(rows,'avg_off');
-  const avgOnl = avgField(rows,'avg_onl');
-  setAEl('an-sales-total', salesTotal);
-  setAEl('an-sales-off', salesOff);
-  setAEl('an-sales-onl', salesOnl);
-  setAEl('an-avg-off', fmt(avgOff)+' ₸');
-  setAEl('an-avg-onl', fmt(avgOnl)+' ₸');
+  const salesOff=sumField(rows,'sales_off'), salesOnl=sumField(rows,'sales_onl');
+  const salesTotal=salesOff+salesOnl;
+  const avgOff=avgField(rows,'avg_off'), avgOnl=avgField(rows,'avg_onl');
+  pf('an-sales-block', salesTotal, 'sales_total', 'amb', v=>v);
+  pf('an-avg-off-block', Math.round(avgOff), 'avg_off', 'amb', v=>fmt(v)+' ₸');
+  pf('an-avg-onl-block', Math.round(avgOnl), 'avg_onl', 'amb', v=>fmt(v)+' ₸');
+  const soEl=document.getElementById('an-sales-split');
+  if(soEl){
+    const soPlan=getPlan('sales_off',days), sonPlan=getPlan('sales_onl',days);
+    const soPct=soPlan?getPct(salesOff,soPlan):null, sonPct=sonPlan?getPct(salesOnl,sonPlan):null;
+    soEl.innerHTML=`<div class="an-scl">ОФФ / ОНЛ</div>
+      <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+        <span class="an-scv">${salesOff}</span><span style="font-size:11px;color:#633806;opacity:.4">/</span><span class="an-scv">${salesOnl}</span>
+      </div>
+      <div class="pf-wrap pf-amb"><div class="pf-sub">${soPct!==null?soPct+'%':'—'} / ${sonPct!==null?sonPct+'%':'—'}</div></div>`;
+  }
 
   // ПУ
-  const puRecOff = sumField(rows,'pu_rec_off');
-  const puRecOnl = sumField(rows,'pu_rec_onl');
-  const puRecTotal = puRecOff + puRecOnl;
-  const puCameOff = sumField(rows,'pu_came_off');
-  const puCameOnl = sumField(rows,'pu_came_onl');
-  const puCameTotal = puCameOff + puCameOnl;
-  const puConv = puRecTotal>0 ? puCameTotal/puRecTotal*100 : 0;
-  const puConvOff = puRecOff>0 ? puCameOff/puRecOff*100 : 0;
-  const puConvOnl = puRecOnl>0 ? puCameOnl/puRecOnl*100 : 0;
-  setAEl('an-pu-rec', puRecTotal);
-  setAEl('an-pu-came', puCameTotal);
-  setAEl('an-pu-conv', fmtPct(puConv));
+  const puRecOff=sumField(rows,'pu_rec_off'), puRecOnl=sumField(rows,'pu_rec_onl');
+  const puRecTotal=puRecOff+puRecOnl;
+  const puCameOff=sumField(rows,'pu_came_off'), puCameOnl=sumField(rows,'pu_came_onl');
+  const puCameTotal=puCameOff+puCameOnl;
+  const puConv=puRecTotal>0?puCameTotal/puRecTotal*100:0;
+  const puConvOff=puRecOff>0?puCameOff/puRecOff*100:0;
+  const puConvOnl=puRecOnl>0?puCameOnl/puRecOnl*100:0;
+  pf('an-pu-rec-block', puRecTotal, 'pu_rec_total', 'pur', v=>v);
+  pf('an-pu-came-block', puCameTotal, 'pu_came_total', 'pur', v=>v);
+  // Conv % — plan is fixed target not scaled by days
+  const convPlan = plansData['pu_conv']?.monthly || null;
+  const convPct2 = convPlan ? getPct(Math.round(puConv), convPlan) : null;
+  const convEl = document.getElementById('an-pu-conv-block');
+  if(convEl){
+    const barW = Math.min(100, convPct2||0);
+    const isWarn = convPct2!==null && convPct2<80;
+    convEl.innerHTML=`<div class="an-scv" style="color:#534AB7">${(Math.round(puConv*10)/10).toFixed(1)}%</div>`
+      + (convPlan ? `<div class="pf-wrap pf-pur${isWarn?' pf-warn':''}">
+        <div class="pf-row"><div class="pf-bar-bg"><div class="pf-bar-fill" style="width:${barW}%"></div></div>
+        <span class="pf-pct">${convPct2!==null?convPct2+'%':'—'}</span></div>
+        <div class="pf-sub">цель: ${convPlan}%</div></div>` : '');
+  }
+  const bPU=document.getElementById('an-bar-pu'); if(bPU) bPU.style.width=Math.min(100,puConv)+'%';
   setAEl('an-pu-rec-off', puRecOff); setAEl('an-pu-came-off', puCameOff);
-  setAEl('an-pu-conv-off', fmtPct(puConvOff));
+  setAEl('an-pu-conv-off', (Math.round(puConvOff*10)/10).toFixed(1)+'%');
   setAEl('an-pu-rec-onl', puRecOnl); setAEl('an-pu-came-onl', puCameOnl);
-  setAEl('an-pu-conv-onl', fmtPct(puConvOnl));
-  const barPU = document.getElementById('an-bar-pu');
-  if(barPU) barPU.style.width = Math.min(100,puConv)+'%';
+  setAEl('an-pu-conv-onl', (Math.round(puConvOnl*10)/10).toFixed(1)+'%');
 
   // АКАДЕМИЯ
-  const grOff = lastField(rows,'gr_off');
-  const grOnl = lastField(rows,'gr_onl');
-  const stOff = lastField(rows,'st_off');
-  const stOnl = lastField(rows,'st_onl');
-  const rooms = lastField(rows,'rooms_used');
-  const occ = lastField(rows,'occ_pct');
-  setAEl('an-gr-total', grOff+grOnl);
+  const grOff=lastField(rows,'gr_off'), grOnl=lastField(rows,'gr_onl');
+  const stOff=lastField(rows,'st_off'), stOnl=lastField(rows,'st_onl');
+  const rooms=lastField(rows,'rooms_used'), occ=lastField(rows,'occ_pct');
+  pf('an-gr-block', grOff+grOnl, 'gr_off', 'cor', v=>v);
+  pf('an-st-block', stOff+stOnl, 'st_off', 'cor', v=>v);
   setAEl('an-gr-off', grOff); setAEl('an-gr-onl', grOnl);
-  setAEl('an-st-total', stOff+stOnl);
   setAEl('an-st-off', stOff); setAEl('an-st-onl', stOnl);
   setAEl('an-rooms', rooms);
-  setAEl('an-occ', fmtPct(occ));
-  const barOcc = document.getElementById('an-bar-occ');
-  if(barOcc) barOcc.style.width = Math.min(100,occ)+'%';
+  // Occ
+  const occPlan = plansData['occ_pct']?.monthly || null;
+  const occPct2 = occPlan ? getPct(Math.round(occ), occPlan) : null;
+  const occEl = document.getElementById('an-occ');
+  if(occEl){
+    const barW = Math.min(100, occPct2||0);
+    occEl.innerHTML=`<span style="font-size:20px;font-weight:500;color:#993C1D">${(Math.round(occ*10)/10).toFixed(0)}%</span>`
+      + (occPlan ? `<div class="pf-wrap pf-cor"><div class="pf-row">
+        <div class="pf-bar-bg"><div class="pf-bar-fill" style="width:${barW}%"></div></div>
+        <span class="pf-pct">${occPct2!==null?occPct2+'%':'—'}</span></div>
+        <div class="pf-sub">цель: ${occPlan}%</div></div>` : '');
+  }
+  const bOcc=document.getElementById('an-bar-occ'); if(bOcc) bOcc.style.width=Math.min(100,occ)+'%';
 }
-
 function setRangeMode(mode){
   rangeMode = mode;
   // Update active button
@@ -1955,6 +2092,7 @@ function buildAnalyticsPage(){
     <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)"></div>
     <div style="font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.4rem">ИТОГО ЗА ПЕРИОД</div>
     <div id="an-rev-total" style="font-size:26px;font-weight:500;color:#fff;position:relative;z-index:1">—</div>
+    <div id="an-rev-plan"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.875rem">
       <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px">
         <div style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.3rem">ОФФЛАЙН</div>
@@ -1986,14 +2124,10 @@ function buildAnalyticsPage(){
   <div style="background:#E1F5EE;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
     <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#0F6E56;margin-bottom:10px">ЛИДЫ И БЮДЖЕТ</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div class="an-sc an-sc-teal"><div class="an-scl">ЛИДОВ ВСЕГО</div><div class="an-scv" id="an-leads-total">—</div><div class="an-scs">за период</div></div>
-      <div class="an-sc an-sc-teal"><div class="an-scl">CPL СРЕДНИЙ</div><div class="an-scv" id="an-cpl">—</div><div class="an-scs">стоимость лида</div></div>
-      <div class="an-sc an-sc-teal"><div class="an-scl">РАСХОД ТАРГЕТ</div><div class="an-scv" id="an-spend">—</div></div>
-      <div class="an-sc an-sc-teal"><div class="an-scl">ОФФ / ОНЛ</div>
-        <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
-          <span class="an-scv" id="an-leads-off">—</span><span style="font-size:11px;color:#085041;opacity:.4">/</span><span class="an-scv" id="an-leads-onl">—</span>
-        </div>
-      </div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">ЛИДОВ ВСЕГО</div><div id="an-leads-block">—</div></div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">CPL СРЕДНИЙ</div><div id="an-cpl-block">—</div></div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">РАСХОД ТАРГЕТ</div><div id="an-spend-block">—</div></div>
+      <div class="an-sc an-sc-teal" id="an-leads-split"><div class="an-scl">ОФФ / ОНЛ</div></div>
     </div>
   </div>
 
@@ -2004,14 +2138,10 @@ function buildAnalyticsPage(){
   <div style="background:#FAEEDA;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
     <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#854F0B;margin-bottom:10px">ПРОДАЖИ И СРЕДНИЙ ЧЕК</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div class="an-sc an-sc-amb"><div class="an-scl">ПРОДАЖ ВСЕГО</div><div class="an-scv" id="an-sales-total">—</div></div>
-      <div class="an-sc an-sc-amb"><div class="an-scl">ОФФ / ОНЛ</div>
-        <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
-          <span class="an-scv" id="an-sales-off">—</span><span style="font-size:11px;color:#633806;opacity:.4">/</span><span class="an-scv" id="an-sales-onl">—</span>
-        </div>
-      </div>
-      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОФФ</div><div class="an-scv" id="an-avg-off">—</div></div>
-      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОНЛ</div><div class="an-scv" id="an-avg-onl">—</div></div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">ПРОДАЖ ВСЕГО</div><div id="an-sales-block">—</div></div>
+      <div class="an-sc an-sc-amb" id="an-sales-split"><div class="an-scl">ОФФ / ОНЛ</div></div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОФФ</div><div id="an-avg-off-block">—</div></div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОНЛ</div><div id="an-avg-onl-block">—</div></div>
     </div>
   </div>
 
@@ -2022,9 +2152,9 @@ function buildAnalyticsPage(){
   <div style="background:#EEEDFE;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
     <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:10px">ВОРОНКА ДОХОДИМОСТИ</div>
     <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
-      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ЗАПИСЕЙ</div><div class="an-scv" id="an-pu-rec">—</div></div>
-      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ДОШЛО</div><div class="an-scv" id="an-pu-came">—</div></div>
-      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">КОНВЕРСИЯ</div><div class="an-scv" id="an-pu-conv" style="font-size:20px;color:#534AB7">—</div></div>
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ЗАПИСЕЙ</div><div id="an-pu-rec-block">—</div></div>
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ДОШЛО</div><div id="an-pu-came-block">—</div></div>
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">КОНВЕРСИЯ</div><div id="an-pu-conv-block">—</div></div>
     </div>
     <div style="height:5px;background:rgba(83,74,183,.15);border-radius:10px;overflow:hidden;margin-bottom:10px"><div id="an-bar-pu" style="height:100%;background:#534AB7;border-radius:10px;width:0%;transition:width .5s"></div></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
@@ -2050,13 +2180,13 @@ function buildAnalyticsPage(){
   <div style="background:#FAECE7;border-radius:var(--r);padding:14px;margin-bottom:1.5rem">
     <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#993C1D;margin-bottom:10px">ГРУППЫ И УЧЕНИКИ</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-      <div class="an-sc an-sc-cor"><div class="an-scl">ГРУПП ВСЕГО</div><div class="an-scv" id="an-gr-total">—</div><div class="an-scs"><span id="an-gr-off">—</span> офф · <span id="an-gr-onl">—</span> онл</div></div>
-      <div class="an-sc an-sc-cor"><div class="an-scl">УЧЕНИКОВ</div><div class="an-scv" id="an-st-total">—</div><div class="an-scs"><span id="an-st-off">—</span> офф · <span id="an-st-onl">—</span> онл</div></div>
+      <div class="an-sc an-sc-cor"><div class="an-scl">ГРУПП ВСЕГО</div><div id="an-gr-block">—</div><div class="an-scs"><span id="an-gr-off">—</span> офф · <span id="an-gr-onl">—</span> онл</div></div>
+      <div class="an-sc an-sc-cor"><div class="an-scl">УЧЕНИКОВ</div><div id="an-st-block">—</div><div class="an-scs"><span id="an-st-off">—</span> офф · <span id="an-st-onl">—</span> онл</div></div>
     </div>
     <div style="background:rgba(255,255,255,.6);border-radius:10px;padding:10px 12px">
       <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
         <span style="font-size:11px;color:#712B13;opacity:.7">Загруженность оффлайн точки</span>
-        <span id="an-occ" style="font-size:20px;font-weight:500;color:#993C1D">—</span>
+        <div id="an-occ"></div>
       </div>
       <div style="height:7px;background:rgba(153,60,29,.12);border-radius:10px;overflow:hidden;margin-bottom:6px"><div id="an-bar-occ" style="height:100%;background:#993C1D;border-radius:10px;width:0%;transition:width .5s"></div></div>
       <div style="font-size:11px;color:#712B13;opacity:.65">Аудиторий занято: <span id="an-rooms" style="font-weight:500;opacity:1">—</span></div>
@@ -2078,7 +2208,7 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.getRegistrations().then(regs => {
     const unregs = regs.map(r => r.unregister());
     Promise.all(unregs).then(() => {
-      navigator.serviceWorker.register('./sw.js?v=1782301809').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=1782311617').catch(()=>{});
     });
   });
   // Also clear all caches
