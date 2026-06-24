@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- ForcedBuild: 1782300251 OldBuild: 20260624-063524 -->
+<!-- ForcedBuild: 1782301809 OldBuild: 20260624-063524 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Embassy · Производственные линии</title>
 <link rel="manifest" href="manifest.json">
@@ -492,6 +492,32 @@ body.edit-mode .page-wrap{padding-top:calc(var(--top-h) + env(safe-area-inset-to
 .conv-val{font-size:13px;font-weight:500;color:var(--ink);}
 .conv-val input{width:60px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);outline:none;text-align:right;}
 .conv-arrow{font-size:11px;color:var(--ink3);}
+
+
+.an-sec-head{display:flex;align-items:center;gap:8px;margin:1.5rem 0 .75rem;}
+.an-dot{width:7px;height:7px;border-radius:50%;background:var(--purple);flex-shrink:0;}
+.an-sec-lbl{font-size:10px;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--purple);}
+.an-sec-line{flex:1;height:.5px;background:var(--edge2);}
+.an-sc{border-radius:10px;padding:10px 12px;}
+.an-sc-teal{background:rgba(255,255,255,.6);}
+.an-sc-amb{background:rgba(255,255,255,.6);}
+.an-sc-pur{background:rgba(255,255,255,.6);}
+.an-sc-cor{background:rgba(255,255,255,.6);}
+.an-scl{font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:3px;}
+.an-sc-teal .an-scl{color:#085041;opacity:.7;}
+.an-sc-amb .an-scl{color:#633806;opacity:.7;}
+.an-sc-pur .an-scl{color:#3C3489;opacity:.7;}
+.an-sc-cor .an-scl{color:#712B13;opacity:.7;}
+.an-scv{font-size:19px;font-weight:500;}
+.an-sc-teal .an-scv{color:#0F6E56;}
+.an-sc-amb .an-scv{color:#854F0B;}
+.an-sc-pur .an-scv{color:#534AB7;}
+.an-sc-cor .an-scv{color:#993C1D;}
+.an-scs{font-size:11px;margin-top:2px;opacity:.6;}
+.an-sc-teal .an-scs{color:#085041;}
+.an-sc-amb .an-scs{color:#633806;}
+.an-sc-pur .an-scs{color:#3C3489;}
+.an-sc-cor .an-scs{color:#712B13;}
 
 </style>
 </head>
@@ -1897,7 +1923,6 @@ function buildAnalyticsPage(){
     <button onclick="fetchSheetData(true)" style="height:34px;padding:0 14px;border-radius:20px;border:0.5px solid var(--edge2);background:var(--bg2);color:var(--ink2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Обновить</button>
   </div>
 
-  <!-- ДИАПАЗОН ДАТ -->
   <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:12px 14px;margin-bottom:1.25rem">
     <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">ПЕРИОД</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
@@ -1923,115 +1948,122 @@ function buildAnalyticsPage(){
   <div id="an-data-wrap">
 
   <!-- ПРИХОД -->
-  <div class="section-header"><div class="section-title">ОБЩИЙ ПРИХОД</div></div>
-  <div style="background:var(--purple);border-radius:var(--r);padding:1.375rem;margin-bottom:8px;position:relative;overflow:hidden">
+  <div class="an-sec-head" style="--dot:#534AB7;--lbl:#534AB7">
+    <div class="an-dot"></div><span class="an-sec-lbl">ОБЩИЙ ПРИХОД</span><div class="an-sec-line"></div>
+  </div>
+  <div style="background:var(--purple);border-radius:var(--r);padding:1.25rem;margin-bottom:8px;position:relative;overflow:hidden">
     <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)"></div>
-    <div style="font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:.4rem">ИТОГО ЗА ПЕРИОД</div>
-    <div id="an-rev-total" style="font-size:28px;font-weight:500;color:#fff;margin-bottom:.25rem;position:relative;z-index:1">—</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.875rem">
-      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px">
-        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,0.55);margin-bottom:.3rem">ОФФЛАЙН</div>
-        <div id="an-rev-off" style="font-size:17px;font-weight:500;color:#fff">—</div>
+    <div style="font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.4rem">ИТОГО ЗА ПЕРИОД</div>
+    <div id="an-rev-total" style="font-size:26px;font-weight:500;color:#fff;position:relative;z-index:1">—</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:.875rem">
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.3rem">ОФФЛАЙН</div>
+        <div id="an-rev-off" style="font-size:16px;font-weight:500;color:#fff">—</div>
       </div>
-      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px">
-        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,0.55);margin-bottom:.3rem">ОНЛАЙН</div>
-        <div id="an-rev-onl" style="font-size:17px;font-weight:500;color:#fff">—</div>
+      <div style="background:rgba(255,255,255,.1);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.3rem">ОНЛАЙН</div>
+        <div id="an-rev-onl" style="font-size:16px;font-weight:500;color:#fff">—</div>
       </div>
     </div>
   </div>
-  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
-      <span style="font-size:11px;color:var(--ink2);min-width:70px">Оффлайн</span>
-      <div style="flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-off" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
-      <span id="an-rev-off-pct" style="font-size:12px;font-weight:500;color:var(--ink);min-width:36px;text-align:right">—</span>
+  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:12px 14px;margin-bottom:1.25rem">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">
+      <span style="font-size:11px;color:var(--ink2);min-width:68px">Оффлайн</span>
+      <div style="flex:1;height:5px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-off" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
+      <span id="an-rev-off-pct" style="font-size:11px;font-weight:500;color:var(--ink);min-width:30px;text-align:right">—</span>
     </div>
     <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:11px;color:var(--ink2);min-width:70px">Онлайн</span>
-      <div style="flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-onl" style="height:100%;background:var(--teal);border-radius:10px;width:0%;transition:width .5s"></div></div>
-      <span id="an-rev-onl-pct" style="font-size:12px;font-weight:500;color:var(--ink);min-width:36px;text-align:right">—</span>
+      <span style="font-size:11px;color:var(--ink2);min-width:68px">Онлайн</span>
+      <div style="flex:1;height:5px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-onl" style="height:100%;background:var(--teal);border-radius:10px;width:0%;transition:width .5s"></div></div>
+      <span id="an-rev-onl-pct" style="font-size:11px;font-weight:500;color:var(--ink);min-width:30px;text-align:right">—</span>
     </div>
   </div>
 
   <!-- МАРКЕТИНГ -->
-  <div class="section-header"><div class="section-title">МАРКЕТИНГ</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-    <div class="m-card"><div class="m-card-label">ЛИДОВ ВСЕГО</div><div class="m-card-val" id="an-leads-total">—</div><div class="m-card-sub">входящих</div></div>
-    <div class="m-card"><div class="m-card-label">CPL СРЕДНИЙ</div><div class="m-card-val" id="an-cpl">—</div><div class="m-card-sub">стоимость лида</div></div>
-    <div class="m-card"><div class="m-card-label">РАСХОД ТАРГЕТ</div><div class="m-card-val" id="an-spend">—</div><div class="m-card-sub">бюджет за период</div></div>
-    <div class="m-card" style="background:var(--bg3)">
-      <div class="m-card-label">ОФФЛАЙН / ОНЛАЙН</div>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
-        <span id="an-leads-off" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
-        <span style="font-size:11px;color:var(--ink3)">/</span>
-        <span id="an-leads-onl" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+  <div class="an-sec-head" style="--dot:#0F6E56;--lbl:#0F6E56">
+    <div class="an-dot"></div><span class="an-sec-lbl" style="color:#0F6E56">МАРКЕТИНГ</span><div class="an-sec-line"></div>
+  </div>
+  <div style="background:#E1F5EE;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
+    <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#0F6E56;margin-bottom:10px">ЛИДЫ И БЮДЖЕТ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="an-sc an-sc-teal"><div class="an-scl">ЛИДОВ ВСЕГО</div><div class="an-scv" id="an-leads-total">—</div><div class="an-scs">за период</div></div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">CPL СРЕДНИЙ</div><div class="an-scv" id="an-cpl">—</div><div class="an-scs">стоимость лида</div></div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">РАСХОД ТАРГЕТ</div><div class="an-scv" id="an-spend">—</div></div>
+      <div class="an-sc an-sc-teal"><div class="an-scl">ОФФ / ОНЛ</div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+          <span class="an-scv" id="an-leads-off">—</span><span style="font-size:11px;color:#085041;opacity:.4">/</span><span class="an-scv" id="an-leads-onl">—</span>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- ПРОДАЖИ -->
-  <div class="section-header"><div class="section-title">ОТДЕЛ ПРОДАЖ</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-    <div class="m-card"><div class="m-card-label">ПРОДАЖ ВСЕГО</div><div class="m-card-val" id="an-sales-total">—</div></div>
-    <div class="m-card" style="background:var(--bg3)">
-      <div class="m-card-label">ОФЛАЙН / ОНЛАЙН</div>
-      <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
-        <span id="an-sales-off" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
-        <span style="font-size:11px;color:var(--ink3)">/</span>
-        <span id="an-sales-onl" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+  <div class="an-sec-head">
+    <div class="an-dot" style="background:#854F0B"></div><span class="an-sec-lbl" style="color:#854F0B">ОТДЕЛ ПРОДАЖ</span><div class="an-sec-line"></div>
+  </div>
+  <div style="background:#FAEEDA;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
+    <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#854F0B;margin-bottom:10px">ПРОДАЖИ И СРЕДНИЙ ЧЕК</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div class="an-sc an-sc-amb"><div class="an-scl">ПРОДАЖ ВСЕГО</div><div class="an-scv" id="an-sales-total">—</div></div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">ОФФ / ОНЛ</div>
+        <div style="display:flex;align-items:baseline;gap:4px;margin-top:4px">
+          <span class="an-scv" id="an-sales-off">—</span><span style="font-size:11px;color:#633806;opacity:.4">/</span><span class="an-scv" id="an-sales-onl">—</span>
+        </div>
       </div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОФФ</div><div class="an-scv" id="an-avg-off">—</div></div>
+      <div class="an-sc an-sc-amb"><div class="an-scl">СР. ЧЕК ОНЛ</div><div class="an-scv" id="an-avg-onl">—</div></div>
     </div>
-    <div class="m-card"><div class="m-card-label">СР. ЧЕК ОФФЛАЙН</div><div class="m-card-val" id="an-avg-off">—</div></div>
-    <div class="m-card"><div class="m-card-label">СР. ЧЕК ОНЛАЙН</div><div class="m-card-val" id="an-avg-onl">—</div></div>
   </div>
 
   <!-- ПУ -->
-  <div class="section-header"><div class="section-title">ПРОБНЫЙ УРОК (ПУ)</div></div>
-  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:8px">
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
-      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">ЗАПИСЕЙ</div><div id="an-pu-rec" style="font-size:22px;font-weight:500;color:var(--ink)">—</div></div>
-      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">ДОШЛО</div><div id="an-pu-came" style="font-size:22px;font-weight:500;color:var(--ink)">—</div></div>
-      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">КОНВЕРСИЯ</div><div id="an-pu-conv" style="font-size:22px;font-weight:500;color:var(--purple)">—</div></div>
+  <div class="an-sec-head">
+    <div class="an-dot" style="background:#534AB7"></div><span class="an-sec-lbl" style="color:#534AB7">ПРОБНЫЙ УРОК (ПУ)</span><div class="an-sec-line"></div>
+  </div>
+  <div style="background:#EEEDFE;border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
+    <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#534AB7;margin-bottom:10px">ВОРОНКА ДОХОДИМОСТИ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px">
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ЗАПИСЕЙ</div><div class="an-scv" id="an-pu-rec">—</div></div>
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">ДОШЛО</div><div class="an-scv" id="an-pu-came">—</div></div>
+      <div class="an-sc an-sc-pur" style="text-align:center"><div class="an-scl" style="text-align:center">КОНВЕРСИЯ</div><div class="an-scv" id="an-pu-conv" style="font-size:20px;color:#534AB7">—</div></div>
     </div>
-    <div style="height:6px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:12px"><div id="an-bar-pu" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-      <div style="background:var(--bg3);border-radius:10px;padding:10px 12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">ОФФЛАЙН</div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Записей</span><span id="an-pu-rec-off" style="font-weight:500;color:var(--ink)">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Дошло</span><span id="an-pu-came-off" style="font-weight:500;color:var(--ink)">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Конверсия</span><span id="an-pu-conv-off" style="font-weight:600;color:var(--purple)">—</span></div>
+    <div style="height:5px;background:rgba(83,74,183,.15);border-radius:10px;overflow:hidden;margin-bottom:10px"><div id="an-bar-pu" style="height:100%;background:#534AB7;border-radius:10px;width:0%;transition:width .5s"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div class="an-sc an-sc-pur">
+        <div class="an-scl" style="margin-bottom:5px">ОФФЛАЙН</div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Записей</span><span id="an-pu-rec-off" style="font-weight:500">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Дошло</span><span id="an-pu-came-off" style="font-weight:500">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Конверсия</span><span id="an-pu-conv-off" style="font-weight:600;color:#534AB7">—</span></div>
       </div>
-      <div style="background:var(--bg3);border-radius:10px;padding:10px 12px">
-        <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">ОНЛАЙН</div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Записей</span><span id="an-pu-rec-onl" style="font-weight:500;color:var(--ink)">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Дошло</span><span id="an-pu-came-onl" style="font-weight:500;color:var(--ink)">—</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
-          <span>Конверсия</span><span id="an-pu-conv-onl" style="font-weight:600;color:var(--purple)">—</span></div>
+      <div class="an-sc an-sc-pur">
+        <div class="an-scl" style="margin-bottom:5px">ОНЛАЙН</div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Записей</span><span id="an-pu-rec-onl" style="font-weight:500">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Дошло</span><span id="an-pu-came-onl" style="font-weight:500">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:#3C3489;padding:2px 0"><span>Конверсия</span><span id="an-pu-conv-onl" style="font-weight:600;color:#534AB7">—</span></div>
       </div>
     </div>
   </div>
 
   <!-- АКАДЕМИЯ -->
-  <div class="section-header"><div class="section-title">АКАДЕМИЯ</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-    <div class="m-card"><div class="m-card-label">ГРУПП ВСЕГО</div><div class="m-card-val" id="an-gr-total">—</div><div class="m-card-sub"><span id="an-gr-off">—</span> офф / <span id="an-gr-onl">—</span> онл</div></div>
-    <div class="m-card"><div class="m-card-label">УЧЕНИКОВ ВСЕГО</div><div class="m-card-val" id="an-st-total">—</div><div class="m-card-sub"><span id="an-st-off">—</span> офф / <span id="an-st-onl">—</span> онл</div></div>
+  <div class="an-sec-head">
+    <div class="an-dot" style="background:#993C1D"></div><span class="an-sec-lbl" style="color:#993C1D">АКАДЕМИЯ</span><div class="an-sec-line"></div>
   </div>
-  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:1.5rem">
-    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-      <span style="font-size:12px;font-weight:500;color:var(--ink)">Загруженность оффлайн точки</span>
-      <span id="an-occ" style="font-size:22px;font-weight:500;color:var(--purple)">—</span>
+  <div style="background:#FAECE7;border-radius:var(--r);padding:14px;margin-bottom:1.5rem">
+    <div style="font-size:10px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#993C1D;margin-bottom:10px">ГРУППЫ И УЧЕНИКИ</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div class="an-sc an-sc-cor"><div class="an-scl">ГРУПП ВСЕГО</div><div class="an-scv" id="an-gr-total">—</div><div class="an-scs"><span id="an-gr-off">—</span> офф · <span id="an-gr-onl">—</span> онл</div></div>
+      <div class="an-sc an-sc-cor"><div class="an-scl">УЧЕНИКОВ</div><div class="an-scv" id="an-st-total">—</div><div class="an-scs"><span id="an-st-off">—</span> офф · <span id="an-st-onl">—</span> онл</div></div>
     </div>
-    <div style="height:8px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:8px"><div id="an-bar-occ" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
-    <div style="font-size:11px;color:var(--ink3)">Аудиторий занято: <span id="an-rooms" style="font-weight:500;color:var(--ink)">—</span></div>
+    <div style="background:rgba(255,255,255,.6);border-radius:10px;padding:10px 12px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px">
+        <span style="font-size:11px;color:#712B13;opacity:.7">Загруженность оффлайн точки</span>
+        <span id="an-occ" style="font-size:20px;font-weight:500;color:#993C1D">—</span>
+      </div>
+      <div style="height:7px;background:rgba(153,60,29,.12);border-radius:10px;overflow:hidden;margin-bottom:6px"><div id="an-bar-occ" style="height:100%;background:#993C1D;border-radius:10px;width:0%;transition:width .5s"></div></div>
+      <div style="font-size:11px;color:#712B13;opacity:.65">Аудиторий занято: <span id="an-rooms" style="font-weight:500;opacity:1">—</span></div>
+    </div>
   </div>
 
   </div>`;
-
   // Range button styles
   const style = document.createElement('style');
   style.textContent = `.range-btn{height:30px;padding:0 12px;border-radius:20px;border:0.5px solid var(--edge2);background:var(--bg2);color:var(--ink2);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;} .range-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);} .range-btn:hover:not(.active){background:var(--bg3);}`;
@@ -2046,7 +2078,7 @@ if('serviceWorker' in navigator){
   navigator.serviceWorker.getRegistrations().then(regs => {
     const unregs = regs.map(r => r.unregister());
     Promise.all(unregs).then(() => {
-      navigator.serviceWorker.register('./sw.js?v=1782300251').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=1782301809').catch(()=>{});
     });
   });
   // Also clear all caches
