@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- ForcedBuild: 1782283253 OldBuild: 20260624-063524 -->
+<!-- ForcedBuild: 1782286689 OldBuild: 20260624-063524 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Embassy · Производственные линии</title>
 <link rel="manifest" href="manifest.json">
@@ -47,13 +47,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-seri
 .icon-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
 
 /* ── TAB BAR ── */
-.tab-bar{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:0.5px solid var(--edge2);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom);height:calc(var(--tab-h) + env(safe-area-inset-bottom));overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
-.tab-bar::-webkit-scrollbar{display:none;}
-.tab-btn{flex:0 0 auto;min-width:72px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:none;background:none;cursor:pointer;padding:8px 6px;color:var(--ink3);-webkit-tap-highlight-color:transparent;transition:color .15s;}
+.tab-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:var(--bg2);border-top:0.5px solid var(--edge2);
+  display:flex;justify-content:center;align-items:stretch;
+  z-index:200;
+  padding-bottom:env(safe-area-inset-bottom);
+  height:calc(var(--tab-h) + env(safe-area-inset-bottom));
+}
+.tab-bar-inner{
+  display:flex;justify-content:center;align-items:stretch;
+  width:100%;max-width:600px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.tab-bar-inner::-webkit-scrollbar{display:none;}
+.tab-btn{
+  flex:1;min-width:64px;max-width:100px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;border:none;background:none;cursor:pointer;
+  padding:6px 4px;color:var(--ink3);
+  -webkit-tap-highlight-color:transparent;
+  transition:color .2s;
+}
 .tab-btn.active{color:var(--purple);}
-.tab-icon-wrap{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.tab-icon-wrap{
+  width:48px;height:48px;border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s, transform .2s;
+}
+.tab-btn:hover .tab-icon-wrap{transform:scale(1.15);}
 .tab-btn.active .tab-icon-wrap{background:var(--purple-bg);}
-.tab-icon-wrap svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s;}
+.tab-btn:hover:not(.active) .tab-icon-wrap{background:var(--bg3);}
+.tab-icon-wrap svg{
+  width:26px;height:26px;
+  stroke:currentColor;fill:none;
+  stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;
+}
 .tab-label{font-size:10px;font-weight:500;white-space:nowrap;}
 
 /* ── PAGES ── */
@@ -244,11 +273,141 @@ mark{background:var(--purple-bg);color:var(--purple-text);border-radius:3px;padd
 /* ── TOAST ── */
 #toast{position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 12px);left:50%;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--bg2);font-size:12px;padding:8px 18px;border-radius:20px;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:999;white-space:nowrap;font-family:inherit;}
 @media print{.tab-bar,.top-bar{display:none;}.page{display:block!important;}.stage-card.open .sb,.sb{display:block!important;}.sh-chev{display:none;}}
+
+/* ── DESKTOP LAYOUT ── */
+@media(min-width:768px){
+  :root{ --tab-h:68px; }
+  .tab-bar{ border-radius:20px 20px 0 0; box-shadow:0 -4px 24px rgba(0,0,0,0.06); }
+  .tab-btn{ min-width:80px; max-width:120px; }
+  .tab-icon-wrap{ width:52px; height:52px; border-radius:18px; }
+  .tab-icon-wrap svg{ width:28px; height:28px; }
+  .tab-label{ font-size:11px; }
+}
+@media(min-width:900px){
+  body{ padding-left:0; padding-right:0; }
+  .page-wrap{ padding-top:calc(var(--top-h) + env(safe-area-inset-top) + 1.5rem); }
+  .page{ max-width:780px; padding:0 2rem 2rem; margin:0 auto; }
+  .top-bar{ padding:0 2rem; }
+  .dash-hero{ padding:1.75rem 2rem; }
+  .tracker-grid{ grid-template-columns:repeat(4,1fr); }
+  .dept-grid{ grid-template-columns:repeat(3,1fr); }
+  .dept-card.full{ grid-column:1/-1; }
+  .stage-row{ grid-template-columns:36px 1fr; gap:0 16px; }
+  .s-node{ width:32px; height:32px; font-size:12px; }
+  .sh{ padding:14px 18px; }
+  .sh-name{ font-size:15px; }
+  .panel{ padding:1.25rem; }
+  .in-out{ flex-direction:row; }
+  .io-div{ width:1px; height:auto; }
+  .bottom-grid{ grid-template-columns:1fr 1fr; }
+  .kpi-grid{ grid-template-columns:repeat(3,1fr); }
+}
+@media(min-width:1200px){
+  .page{ max-width:920px; }
+  .tracker-grid{ grid-template-columns:repeat(4,1fr); gap:12px; }
+  .dept-grid{ grid-template-columns:repeat(3,1fr); gap:10px; }
+  .kpi-grid{ grid-template-columns:repeat(3,1fr); }
+}
+
+/* ── EDIT MODE ── */
+.edit-mode-btn{
+  position:fixed;bottom:calc(var(--tab-h) + env(safe-area-inset-bottom) + 12px);
+  right:16px;z-index:198;
+  height:42px;padding:0 18px;
+  border-radius:21px;border:none;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:500;font-family:inherit;
+  background:var(--bg2);color:var(--ink2);
+  border:0.5px solid var(--edge2);
+  box-shadow:0 2px 12px rgba(0,0,0,0.1);
+  transition:all .2s;
+}
+.edit-mode-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);}
+.edit-mode-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Edit controls — hidden by default */
+.add-btn,.del-btn{display:none;}
+body.edit-mode .add-btn,
+body.edit-mode .del-btn{display:flex;}
+
+.add-btn{
+  align-items:center;gap:5px;
+  height:30px;padding:0 12px;margin-top:6px;
+  border-radius:20px;border:1px dashed var(--purple);
+  background:var(--purple-bg);color:var(--purple-text);
+  font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;
+  transition:background .15s;width:fit-content;
+}
+.add-btn:hover{background:rgba(83,74,183,0.15);}
+.add-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;}
+
+.del-btn{
+  align-items:center;justify-content:center;
+  width:20px;height:20px;flex-shrink:0;
+  border-radius:50%;border:none;
+  background:transparent;color:var(--ink3);
+  cursor:pointer;font-size:14px;line-height:1;
+  transition:background .15s,color .15s;
+  margin-left:4px;
+}
+.del-btn:hover{background:#FAECE7;color:var(--coral);}
+.del-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;}
+
+/* In edit mode — highlight editable areas */
+body.edit-mode [contenteditable]{
+  border-radius:4px;
+  outline:1px dashed rgba(83,74,183,0.25);
+  outline-offset:1px;
+}
+body.edit-mode [contenteditable]:focus{
+  outline:2px solid var(--purple);
+  background:rgba(83,74,183,0.05);
+}
+
+/* Task row with delete */
+.task-item{position:relative;}
+
+/* Team card with delete */
+.team-card{position:relative;}
+
+/* Metric pill delete wrap */
+.metric-wrap{display:inline-flex;align-items:center;gap:2px;}
+
+/* Stage card delete button */
+.stage-del-btn{
+  display:none;
+  position:absolute;top:10px;right:42px;
+  width:26px;height:26px;border-radius:50%;
+  border:none;background:transparent;
+  color:var(--ink3);cursor:pointer;
+  align-items:center;justify-content:center;
+  transition:background .15s,color .15s;z-index:2;
+}
+body.edit-mode .stage-del-btn{display:flex;}
+.stage-del-btn:hover{background:#FAECE7;color:var(--coral);}
+.stage-del-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;}
+.stage-card{position:relative;}
+
+/* Edit mode banner */
+.edit-banner{
+  display:none;
+  position:fixed;top:calc(var(--top-h) + env(safe-area-inset-top));
+  left:0;right:0;z-index:197;
+  background:var(--purple);
+  color:rgba(255,255,255,0.9);
+  font-size:11px;font-weight:500;
+  text-align:center;padding:6px;
+  letter-spacing:0.04em;
+}
+body.edit-mode .edit-banner{display:block;}
+body.edit-mode .page-wrap{padding-top:calc(var(--top-h) + env(safe-area-inset-top) + 30px + 1rem);}
+
 </style>
 </head>
 <body>
 
 <div id="toast"></div>
+<div class="edit-banner">✏️ РЕЖИМ РЕДАКТИРОВАНИЯ — нажмите на любой текст чтобы изменить, используйте + и × для добавления и удаления</div>
 
 <!-- TOP BAR -->
 <div class="top-bar" data-v="1782283253">
@@ -261,7 +420,11 @@ mark{background:var(--purple-bg);color:var(--purple-text);border-radius:3px;padd
 </div>
 
 <!-- TAB BAR -->
-<div class="tab-bar" id="tab-bar"></div>
+<button class="edit-mode-btn" id="edit-mode-btn" onclick="toggleEditMode()">
+  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+  Редактировать
+</button>
+<div class="tab-bar"><div class="tab-bar-inner" id="tab-bar"></div></div>
 
 <!-- PAGES -->
 <div class="page-wrap" id="pages"></div>
@@ -889,6 +1052,7 @@ function buildPipeline(stages, containerId, deptLabel){
     const card=document.createElement('div'); card.className='stage-card'; card.dataset.n=s.n;
     const ckey=deptLabel+'_'+s.n;
     card.innerHTML=`
+      <button class="stage-del-btn" onclick="delItem(this.closest('.stage-row'))" title="Удалить этап"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <div class="sh">
         <div class="sh-body">
           <div class="sh-dept">${s.role||''}</div>
@@ -912,7 +1076,9 @@ function buildPipeline(stages, containerId, deptLabel){
             <div class="task-item">
               <div class="task-check" data-ckey="${ckey}_${ti}" onclick="toggleCheck(this)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
               <div class="task-text" contenteditable="true" data-sid="st-${ckey}-${ti}" onclick="event.stopPropagation()">${t}</div>
+          <button class="del-btn" onclick="delItem(this.closest('.task-item'))" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>`).join('')}
+        <button class="add-btn" onclick="addTask(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить задачу</button>
         </div>
         <div class="sb-panel" data-panel="info">
           <div style="margin-bottom:10px">
@@ -929,7 +1095,8 @@ function buildPipeline(stages, containerId, deptLabel){
           </div>
           <div>
             <div class="sb-lbl">МЕТРИКИ КАЧЕСТВА</div>
-            <div class="metric-pills">${s.metrics.map((m,mi)=>`<span class="metric-pill" contenteditable="true" data-sid="sm-${ckey}-${mi}">${m}</span>`).join('')}</div>
+            <div class="metric-pills">${s.metrics.map((m,mi)=>`<span class="metric-wrap"><span class="metric-pill" contenteditable="true" data-sid="sm-${ckey}-${mi}">${m}</span><button class="del-btn" onclick="delItem(this.closest('.metric-wrap'))" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span>`).join('')}</div>
+          <button class="add-btn" onclick="addMetric(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить метрику</button>
           </div>
         </div>
         <div class="sb-panel" data-panel="notes">
@@ -1031,33 +1198,39 @@ DEPTS.filter(d=>d.id!=='company').forEach((d,di)=>{
       <div class="section-title">ЭТАПЫ ПРОИЗВОДСТВЕННОЙ ЛИНИИ</div>
       <div class="section-sub">Нажмите на этап — раскроются задачи, детали и заметки</div>
     </div>
+    <button class="add-btn" onclick="addTeamMember(this.previousElementSibling)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить сотрудника</button>
     <div class="pipeline" id="pipe-${d.id}" style="margin-bottom:.5rem"></div>
 
+    <button class="add-btn" onclick="addStage(this, '${d.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить этап</button>
     <div class="section-header">
       <div class="section-title">ЦЕПОЧКА ПРОДУКТОВ</div>
     </div>
-    <div class="chain-row" id="chain-${d.id}" style="margin-bottom:1.5rem"></div>
+    <div class="chain-row" id="chain-${d.id}" style="margin-bottom:.5rem"></div>
+    <button class="add-btn" onclick="addChainStep(this)" style="margin-bottom:1rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить шаг в цепочку</button>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       <div class="panel" style="grid-column:1/-1">
         <div class="panel-head"><div class="panel-icon pi-amber"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="panel-title">УЗКИЕ МЕСТА</div></div>
         <div id="bn-${d.id}"></div>
       </div>
+      <button class="add-btn" onclick="addBottleneck(this.previousElementSibling)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить узкое место</button>
       <div class="panel" style="grid-column:1/-1">
         <div class="panel-head"><div class="panel-icon pi-teal"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><div class="panel-title">КЛЮЧЕВЫЕ МЕТРИКИ</div></div>
         <div class="kpi-grid" id="kpi-${d.id}"></div>
       </div>
+      <button class="add-btn" onclick="addKpi(this.previousElementSibling.querySelector('.kpi-grid'))"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить метрику</button>
       <div class="panel" style="grid-column:1/-1">
         <div class="panel-head"><div class="panel-icon pi-coral"><svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg></div><div class="panel-title">ВЛИЯНИЕ НА ДРУГИЕ ПОДРАЗДЕЛЕНИЯ</div></div>
         <div id="imp-${d.id}"></div>
       </div>
     </div>`;
+  // Add impact button will be injected after impact list renders
   pagesEl.appendChild(page);
 
   // Team
   const teamEl=document.getElementById('team-'+d.id);
   d.team.forEach(m=>{
-    teamEl.innerHTML+=`<div class="team-card"><div class="team-avatar">${m.i}</div><div><div class="team-name" contenteditable="true" data-sid="tm-${d.id}-${m.i}">${m.name}</div><div class="team-ckp" contenteditable="true" data-sid="tc-${d.id}-${m.i}">ЦКП: ${m.ckp}</div></div></div>`;
+    teamEl.innerHTML+=`<div class="team-card"><div class="team-avatar">${m.i}</div><div><div class="team-name" contenteditable="true" data-sid="tm-${d.id}-${m.i}">${m.name}</div><div class="team-ckp" contenteditable="true" data-sid="tc-${d.id}-${m.i}">ЦКП: ${m.ckp}</div></div><button class="del-btn" onclick="delItem(this.closest('.team-card'))" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
   });
 
   // Pipeline
@@ -1066,29 +1239,35 @@ DEPTS.filter(d=>d.id!=='company').forEach((d,di)=>{
   // Chain
   const chainEl=document.getElementById('chain-'+d.id);
   d.chain.forEach((p,i)=>{
+    const stepWrap=document.createElement('span');
+    stepWrap.style.cssText='display:inline-flex;align-items:center;gap:3px;';
     const el=document.createElement('span');
     el.className='ch-step'+(i===0?' first':i===d.chain.length-1?' last':'');
     el.setAttribute('contenteditable','true'); el.dataset.sid=`ch-${d.id}-${i}`; el.textContent=p;
-    chainEl.appendChild(el);
+    const delB=document.createElement('button');
+    delB.className='del-btn'; delB.title='Удалить'; delB.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    delB.onclick=()=>{ stepWrap.previousElementSibling?.remove(); stepWrap.remove(); scheduleSave(); };
+    stepWrap.append(el, delB);
+    chainEl.appendChild(stepWrap);
     if(i<d.chain.length-1){const a=document.createElement('span');a.className='ch-arr';a.textContent='→';chainEl.appendChild(a);}
   });
 
   // Bottlenecks
   const bnEl=document.getElementById('bn-'+d.id);
   d.bns.forEach((b,bi)=>{
-    bnEl.innerHTML+=`<div class="bn-item"><div class="bn-bar"></div><div><div class="bn-title" contenteditable="true" data-sid="bnt-${d.id}-${bi}">${b.t}</div><div class="bn-text" contenteditable="true" data-sid="bnx-${d.id}-${bi}">${b.tx}</div></div></div>`;
+    bnEl.innerHTML+=`<div class="bn-item"><div class="bn-bar"></div><div style="flex:1"><div class="bn-title" contenteditable="true" data-sid="bnt-${d.id}-${bi}">${b.t}</div><div class="bn-text" contenteditable="true" data-sid="bnx-${d.id}-${bi}">${b.tx}</div></div><button class="del-btn" onclick="delItem(this.closest('.bn-item'))" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
   });
 
   // KPIs
   const kpiEl=document.getElementById('kpi-'+d.id);
   d.kpis.forEach((k,ki)=>{
-    kpiEl.innerHTML+=`<div class="kpi-cell"><div class="kpi-val" contenteditable="true" data-sid="kv-${d.id}-${ki}">${k.v}</div><div class="kpi-lbl" contenteditable="true" data-sid="kl-${d.id}-${ki}">${k.l}</div></div>`;
+    kpiEl.innerHTML+=`<div class="kpi-cell" style="position:relative"><div class="kpi-val" contenteditable="true" data-sid="kv-${d.id}-${ki}">${k.v}</div><div class="kpi-lbl" contenteditable="true" data-sid="kl-${d.id}-${ki}">${k.l}</div><button class="del-btn" onclick="delItem(this.closest('.kpi-cell'))" style="position:absolute;top:6px;right:6px" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
   });
 
   // Impact
   const impEl=document.getElementById('imp-'+d.id);
   d.impacts.forEach((imp,ii)=>{
-    impEl.innerHTML+=`<div class="imp-item"><span class="imp-dept" contenteditable="true" data-sid="id-${d.id}-${ii}">${imp.d}</span><span class="imp-text" contenteditable="true" data-sid="ix-${d.id}-${ii}">${imp.t}</span></div>`;
+    impEl.innerHTML+=`<div class="imp-item"><span class="imp-dept" contenteditable="true" data-sid="id-${d.id}-${ii}">${imp.d}</span><span class="imp-text" contenteditable="true" data-sid="ix-${d.id}-${ii}">${imp.t}</span><button class="del-btn" onclick="delItem(this.closest('.imp-item'))" title="Удалить"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`;
   });
 });
 
@@ -1098,12 +1277,200 @@ document.addEventListener('input',e=>{
 });
 
 window.addEventListener('load',()=>{ initTheme(); loadAll(); });
+
+// ── EDIT MODE ─────────────────────────────────────────────────────────────
+let isEditMode = false;
+
+function toggleEditMode(){
+  isEditMode = !isEditMode;
+  document.body.classList.toggle('edit-mode', isEditMode);
+  const btn = document.getElementById('edit-mode-btn');
+  btn.classList.toggle('active', isEditMode);
+  btn.innerHTML = isEditMode
+    ? '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Готово'
+    : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> Редактировать';
+  if(!isEditMode) { saveAll(); showToast('✓ Изменения сохранены'); }
+}
+
+// ── ADD / DELETE TASK ────────────────────────────────────────────────────
+function addTask(btn){
+  const tasksCol = btn.closest('.tasks-col') || btn.closest('.sb-panel');
+  const newItem = document.createElement('div');
+  newItem.className = 'task-item';
+  newItem.innerHTML = `<div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="task-text" contenteditable="true">Новая задача</div><button class="del-btn" onclick="delItem(this)" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  btn.before(newItem);
+  newItem.querySelector('[contenteditable]').focus();
+  assignIds(); scheduleSave();
+}
+
+function addMetric(btn){
+  const wrap = btn.closest('.metrics-col') || btn.closest('.sb-panel');
+  const pills = wrap.querySelector('.metric-pills');
+  const mwrap = document.createElement('span');
+  mwrap.className = 'metric-wrap';
+  mwrap.innerHTML = `<span class="metric-pill" contenteditable="true">Новая метрика</span><button class="del-btn" onclick="delItem(this.closest('.metric-wrap'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  pills.appendChild(mwrap);
+  mwrap.querySelector('[contenteditable]').focus();
+  assignIds(); scheduleSave();
+}
+
+function addTeamMember(btn){
+  const strip = btn.closest('.team-strip') || btn.parentElement;
+  const card = document.createElement('div');
+  card.className = 'team-card';
+  card.innerHTML = `<div class="team-avatar" contenteditable="true">??</div><div><div class="team-name" contenteditable="true">Новый сотрудник</div><div class="team-ckp" contenteditable="true">ЦКП: введите описание</div></div><button class="del-btn" onclick="delItem(this.closest('.team-card'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  btn.before(card);
+  card.querySelector('.team-name').focus();
+  assignIds(); scheduleSave();
+}
+
+function addChainStep(btn){
+  const row = btn.closest('.chain-row');
+  const arr = document.createElement('span');
+  arr.className = 'ch-arr';
+  arr.textContent = '→';
+  const stepWrap = document.createElement('span');
+  stepWrap.style.display = 'inline-flex';
+  stepWrap.style.alignItems = 'center';
+  stepWrap.style.gap = '4px';
+  stepWrap.innerHTML = `<span class="ch-step" contenteditable="true">Новый шаг</span><button class="del-btn" onclick="delItem(this.parentElement)" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  btn.before(arr);
+  btn.before(stepWrap);
+  stepWrap.querySelector('[contenteditable]').focus();
+  assignIds(); scheduleSave();
+}
+
+function addBottleneck(btn){
+  const panel = btn.closest('.panel');
+  const item = document.createElement('div');
+  item.className = 'bn-item';
+  item.innerHTML = `<div class="bn-bar"></div><div style="flex:1"><div class="bn-title" contenteditable="true">Новое узкое место</div><div class="bn-text" contenteditable="true">Описание проблемы и последствий</div></div><button class="del-btn" onclick="delItem(this.closest('.bn-item'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  btn.before(item);
+  item.querySelector('.bn-title').focus();
+  assignIds(); scheduleSave();
+}
+
+function addKpi(btn){
+  const grid = btn.closest('.kpi-grid') || btn.previousElementSibling;
+  const kpiGrid = btn.parentElement.querySelector('.kpi-grid') || btn.previousElementSibling;
+  const cell = document.createElement('div');
+  cell.className = 'kpi-cell';
+  cell.innerHTML = `<div class="kpi-val" contenteditable="true">Метрика</div><div class="kpi-lbl" contenteditable="true">Описание</div><button class="del-btn" onclick="delItem(this.closest('.kpi-cell'))" style="position:absolute;top:6px;right:6px" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  cell.style.position = 'relative';
+  if(kpiGrid) kpiGrid.appendChild(cell);
+  else btn.before(cell);
+  cell.querySelector('[contenteditable]').focus();
+  assignIds(); scheduleSave();
+}
+
+function addImpact(btn){
+  const container = btn.previousElementSibling || btn.parentElement;
+  const item = document.createElement('div');
+  item.className = 'imp-item';
+  item.innerHTML = `<span class="imp-dept" contenteditable="true">Отдел</span><span class="imp-text" contenteditable="true">Описание влияния</span><button class="del-btn" onclick="delItem(this.closest('.imp-item'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`;
+  btn.before(item);
+  item.querySelector('.imp-dept').focus();
+  assignIds(); scheduleSave();
+}
+
+function addStage(btn, deptId){
+  const pipeline = document.getElementById('pipe-' + deptId);
+  if(!pipeline) return;
+  const stageCount = pipeline.querySelectorAll('.stage-card').length + 1;
+  const row = document.createElement('div');
+  row.className = 'stage-row';
+  const spine = document.createElement('div');
+  spine.className = 'stage-spine';
+  const node = document.createElement('div');
+  node.className = 's-node';
+  node.textContent = stageCount;
+  const line = document.createElement('div');
+  line.className = 's-line';
+  spine.append(node, line);
+  const wrap = document.createElement('div');
+  wrap.className = 'stage-content';
+  const card = document.createElement('div');
+  card.className = 'stage-card open';
+  const ckey = deptId + '_new_' + Date.now();
+  card.innerHTML = `
+    <button class="stage-del-btn" onclick="delItem(this.closest('.stage-row'))" title="Удалить этап"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    <div class="sh">
+      <div class="sh-body">
+        <div class="sh-dept" contenteditable="true">ОТВЕТСТВЕННЫЙ</div>
+        <div class="sh-name" contenteditable="true" data-sid="sn-${ckey}">Новый этап</div>
+        <div class="sh-product">→ <span contenteditable="true" data-sid="sp-${ckey}">Продукт этапа</span></div>
+      </div>
+      <div class="sh-right">
+        <div class="check-badge"></div>
+        <span class="sh-chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+    </div>
+    <div class="sb">
+      <div class="sb-tabs">
+        <div class="sb-tab active" onclick="switchTab(this,'tasks')">Задачи</div>
+        <div class="sb-tab" onclick="switchTab(this,'info')">Детали</div>
+        <div class="sb-tab" onclick="switchTab(this,'notes')">Заметки</div>
+      </div>
+      <div class="sb-panel active" data-panel="tasks">
+        <div class="sb-lbl" style="margin-top:4px">ЧЕКЛИСТ</div>
+        <div class="task-item">
+          <div class="task-check" onclick="toggleCheck(this)"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="task-text" contenteditable="true">Задача 1</div>
+          <button class="del-btn" onclick="delItem(this.closest('.task-item'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+        </div>
+        <button class="add-btn" onclick="addTask(this)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить задачу</button>
+      </div>
+      <div class="sb-panel" data-panel="info">
+        <div style="margin-bottom:10px">
+          <div class="sb-lbl">ОТВЕТСТВЕННЫЙ</div>
+          <div style="font-size:12px;font-weight:500;color:var(--ink)" contenteditable="true" data-sid="sr-${ckey}">Сотрудник</div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div class="sb-lbl">СРОК</div>
+          <div style="font-size:12px;font-weight:500;color:var(--ink)" contenteditable="true" data-sid="sd-${ckey}">Срок выполнения</div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div class="sb-lbl">ПРОДУКТ (ЦКП ЭТАПА)</div>
+          <div class="product-chip" contenteditable="true" data-sid="spr-${ckey}">Продукт этапа</div>
+        </div>
+        <div>
+          <div class="sb-lbl">МЕТРИКИ КАЧЕСТВА</div>
+          <div class="metric-pills"><span class="metric-wrap"><span class="metric-pill" contenteditable="true">Метрика 1</span><button class="del-btn" onclick="delItem(this.closest('.metric-wrap'))" title="Удалить"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></span></div>
+          <button class="add-btn" onclick="addMetric(this)"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Добавить метрику</button>
+        </div>
+      </div>
+      <div class="sb-panel" data-panel="notes">
+        <div class="sb-lbl" style="margin-top:4px">ЗАМЕТКИ</div>
+        <textarea class="note-area" data-nkey="${ckey}" placeholder="Заметки к этапу..." oninput="scheduleSave()"></textarea>
+      </div>
+    </div>`;
+  card.querySelector('.sh').addEventListener('click', ()=>{
+    const was = card.classList.contains('open');
+    pipeline.querySelectorAll('.stage-card').forEach(c=>c.classList.remove('open'));
+    if(!was) card.classList.add('open');
+  });
+  wrap.appendChild(card);
+  row.append(spine, wrap);
+  pipeline.appendChild(row);
+  card.querySelector('.sh-name').focus();
+  assignIds(); scheduleSave();
+  showToast('✓ Этап добавлен');
+}
+
+function delItem(el){
+  if(!el) return;
+  el.style.transition = 'opacity .2s, transform .2s';
+  el.style.opacity = '0';
+  el.style.transform = 'scale(0.95)';
+  setTimeout(()=>{ el.remove(); scheduleSave(); }, 200);
+}
+
 if('serviceWorker' in navigator){
   // Unregister all old SWs first, then register fresh
   navigator.serviceWorker.getRegistrations().then(regs => {
     const unregs = regs.map(r => r.unregister());
     Promise.all(unregs).then(() => {
-      navigator.serviceWorker.register('./sw.js?v=1782283253').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=1782286689').catch(()=>{});
     });
   });
   // Also clear all caches
