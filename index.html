@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- ForcedBuild: 1782286689 OldBuild: 20260624-063524 -->
+<!-- ForcedBuild: 1782300251 OldBuild: 20260624-063524 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Embassy · Производственные линии</title>
 <link rel="manifest" href="manifest.json">
@@ -401,6 +401,97 @@ body.edit-mode .stage-del-btn{display:flex;}
 }
 body.edit-mode .edit-banner{display:block;}
 body.edit-mode .page-wrap{padding-top:calc(var(--top-h) + env(safe-area-inset-top) + 30px + 1rem);}
+
+
+/* ── ANALYTICS DASHBOARD ── */
+.dash-page{ padding: 0 1rem 1rem; max-width: 860px; margin: 0 auto; }
+
+.month-selector{
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--bg2); border:0.5px solid var(--edge); border-radius:var(--r);
+  padding:12px 16px; margin-bottom:1.25rem;
+}
+.month-nav{width:32px;height:32px;border-radius:50%;border:0.5px solid var(--edge2);background:none;cursor:pointer;color:var(--ink2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.month-nav:hover{background:var(--bg3);}
+.month-label{font-size:14px;font-weight:500;color:var(--ink);}
+
+.revenue-hero{
+  background:var(--purple); border-radius:var(--r); padding:1.375rem;
+  margin-bottom:1.25rem; position:relative; overflow:hidden;
+}
+.revenue-hero::before{content:'';position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,0.06);}
+.rh-label{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:.4rem;}
+.rh-val{font-size:32px;font-weight:500;color:#fff;margin-bottom:.25rem;position:relative;z-index:1;}
+.rh-sub{font-size:12px;color:rgba(255,255,255,0.6);}
+.rh-split{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem;}
+.rh-card{background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 14px;}
+.rh-card-label{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,0.55);margin-bottom:.3rem;}
+.rh-card-val{font-size:20px;font-weight:500;color:#fff;}
+.rh-card-sub{font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px;}
+
+.an-input{
+  width:100%; border:none; background:transparent; font-family:inherit;
+  color:inherit; outline:none; cursor:text;
+}
+.rh-val .an-input{font-size:32px;font-weight:500;color:#fff;}
+.rh-card-val .an-input{font-size:20px;font-weight:500;color:#fff;}
+
+.metrics-section{ margin-bottom:1.25rem; }
+.metrics-2col{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.metrics-3col{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+@media(max-width:480px){ .metrics-3col{ grid-template-columns:1fr 1fr; } }
+
+.m-card{
+  background:var(--bg2); border:0.5px solid var(--edge);
+  border-radius:var(--r); padding:12px 14px; position:relative;
+}
+.m-card-label{font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;}
+.m-card-val{font-size:22px;font-weight:500;color:var(--ink);line-height:1;}
+.m-card-val input{width:100%;border:none;background:transparent;font-family:inherit;font-size:22px;font-weight:500;color:var(--ink);outline:none;padding:0;}
+.m-card-sub{font-size:11px;color:var(--ink3);margin-top:4px;}
+.m-card-sub input{width:100%;border:none;background:transparent;font-family:inherit;font-size:11px;color:var(--ink3);outline:none;padding:0;}
+.m-card-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:10px;font-weight:600;padding:2px 7px;
+  border-radius:20px;
+}
+.badge-up{background:#E1F5EE;color:#085041;}
+.badge-dn{background:#FAECE7;color:#712B13;}
+.badge-neu{background:var(--bg3);color:var(--ink3);}
+
+.split-card{
+  background:var(--bg2);border:0.5px solid var(--edge);
+  border-radius:var(--r);padding:14px;
+}
+.split-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:12px;}
+.split-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.split-row:last-child{margin-bottom:0;}
+.split-label{font-size:11px;color:var(--ink2);min-width:70px;}
+.split-bar-bg{flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden;}
+.split-bar-fill{height:100%;border-radius:10px;transition:width .5s;}
+.split-bar-fill.purple{background:var(--purple);}
+.split-bar-fill.teal{background:var(--teal);}
+.split-val{font-size:12px;font-weight:500;color:var(--ink);min-width:36px;text-align:right;}
+.split-val input{width:50px;border:none;background:transparent;font-family:inherit;font-size:12px;font-weight:500;color:var(--ink);outline:none;text-align:right;}
+
+.occupancy-bar{
+  background:var(--bg2);border:0.5px solid var(--edge);
+  border-radius:var(--r);padding:14px;
+}
+.occ-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.occ-title{font-size:12px;font-weight:600;color:var(--ink);}
+.occ-pct{font-size:22px;font-weight:500;color:var(--purple);}
+.occ-pct input{width:60px;border:none;background:transparent;font-family:inherit;font-size:22px;font-weight:500;color:var(--purple);outline:none;text-align:right;}
+.occ-bar-bg{height:10px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:8px;}
+.occ-bar-fill{height:100%;background:var(--purple);border-radius:10px;transition:width .5s;}
+.occ-sub{font-size:11px;color:var(--ink3);}
+
+.conv-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:0.5px solid var(--edge);}
+.conv-row:last-child{border-bottom:none;}
+.conv-label{font-size:12px;color:var(--ink2);flex:1;}
+.conv-val{font-size:13px;font-weight:500;color:var(--ink);}
+.conv-val input{width:60px;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:500;color:var(--ink);outline:none;text-align:right;}
+.conv-arrow{font-size:11px;color:var(--ink3);}
 
 </style>
 </head>
@@ -1129,7 +1220,12 @@ function switchPage(id){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.id===id));
   document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active', p.id==='page-'+id));
   const dept = DEPTS.find(d=>d.id===id);
-  document.getElementById('top-title').textContent = dept ? dept.title.split('·')[0].trim() : 'Embassy';
+  if(id==='analytics'){
+    document.getElementById('top-title').textContent = 'Аналитика';
+    fetchSheetData();
+  } else {
+    document.getElementById('top-title').textContent = dept ? dept.title.split('·')[0].trim() : 'Embassy';
+  }
   window.scrollTo(0,0);
 }
 
@@ -1144,6 +1240,14 @@ dashTab.innerHTML='<div class="tab-icon-wrap"><svg viewBox="0 0 24 24"><path d="
 dashTab.addEventListener('click',()=>switchPage('company'));
 tabBar.appendChild(dashTab);
 pagesEl.appendChild(buildDashPage());
+
+// Analytics dashboard tab
+const anaTab = document.createElement('button');
+anaTab.className='tab-btn'; anaTab.dataset.id='analytics';
+anaTab.innerHTML='<div class="tab-icon-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><span class="tab-label">Аналитика</span>';
+anaTab.addEventListener('click',()=>switchPage('analytics'));
+tabBar.insertBefore(anaTab, tabBar.children[1] || null);
+pagesEl.appendChild(buildAnalyticsPage());
 
 // Dept tabs + pages
 DEPTS.filter(d=>d.id!=='company').forEach((d,di)=>{
@@ -1465,12 +1569,484 @@ function delItem(el){
   setTimeout(()=>{ el.remove(); scheduleSave(); }, 200);
 }
 
+
+// ── ANALYTICS DASHBOARD ─────────────────────────────────────────────────────
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTBjGb-y9H7EmhQmROSw2G3AT-BfAyZV04MmUtlJhVHJgXrwulW5x2G7WXgJFqwdYbVLwSHyImWwoNB/pub?output=csv';
+
+// Column mapping (0-based) matching Embassy Analytics Template
+const COL = {
+  date:        0,  // A — Дата
+  rev_off:     1,  // B — Приход Оффлайн
+  rev_onl:     2,  // C — Приход Онлайн
+  leads_off:   3,  // D — Лиды Оффлайн
+  leads_onl:   4,  // E — Лиды Онлайн
+  spend:       5,  // F — Расход Таргет
+  cpl:         6,  // G — CPL
+  sales_off:   7,  // H — Продажи Оффлайн
+  sales_onl:   8,  // I — Продажи Онлайн
+  avg_off:     9,  // J — Ср.Чек Офф
+  avg_onl:    10,  // K — Ср.Чек Онл
+  pu_rec_off: 11,  // L — Записей ПУ Офф
+  pu_rec_onl: 12,  // M — Записей ПУ Онл
+  pu_came_off:13,  // N — Дошло ПУ Офф
+  pu_came_onl:14,  // O — Дошло ПУ Онл
+  gr_off:     15,  // P — Групп Офф
+  gr_onl:     16,  // Q — Групп Онл
+  st_off:     17,  // R — Учеников Офф
+  st_onl:     18,  // S — Учеников Онл
+  rooms_used: 19,  // T — Аудиторий занято
+  occ_pct:    20,  // U — Загрузка %
+};
+
+let sheetRows = [];      // all parsed rows [{date, ...values}]
+let sheetLoading = false;
+let sheetLoaded = false;
+let sheetError = null;
+
+// Date range state
+let rangeMode = 'month';  // 'today','yesterday','week','month','prev_month','custom'
+let customFrom = null;
+let customTo = null;
+
+// ── CSV PARSER ───────────────────────────────────────────────────────────────
+function parseCSV(text){
+  const lines = text.trim().split('\n');
+  const rows = [];
+  // Skip header rows (first 3 rows: title, group headers, column headers)
+  let dataStart = 0;
+  for(let i=0;i<lines.length;i++){
+    const first = lines[i].split(',')[0].replace(/"/g,'').trim();
+    // Data rows start where first cell looks like a date DD.MM.YYYY
+    if(/^\d{2}\.\d{2}\.\d{4}$/.test(first) || /^\d{4}-\d{2}-\d{2}/.test(first)){
+      dataStart = i; break;
+    }
+  }
+  for(let i=dataStart; i<lines.length; i++){
+    const cells = parseCSVLine(lines[i]);
+    if(!cells[0]) continue;
+    const dateStr = cells[0].replace(/"/g,'').trim();
+    // Parse date: DD.MM.YYYY or YYYY-MM-DD
+    let d = null;
+    if(/^\d{2}\.\d{2}\.\d{4}$/.test(dateStr)){
+      const [dd,mm,yyyy] = dateStr.split('.');
+      d = new Date(+yyyy, +mm-1, +dd);
+    } else if(/^\d{4}-\d{2}-\d{2}/.test(dateStr)){
+      d = new Date(dateStr.split('T')[0]);
+    }
+    if(!d || isNaN(d.getTime())) continue;
+    const num = s => parseFloat((s||'').replace(/"/g,'').replace(/\s/g,'').replace(',','.')) || 0;
+    rows.push({
+      date: d,
+      rev_off:     num(cells[COL.rev_off]),
+      rev_onl:     num(cells[COL.rev_onl]),
+      leads_off:   num(cells[COL.leads_off]),
+      leads_onl:   num(cells[COL.leads_onl]),
+      spend:       num(cells[COL.spend]),
+      sales_off:   num(cells[COL.sales_off]),
+      sales_onl:   num(cells[COL.sales_onl]),
+      avg_off:     num(cells[COL.avg_off]),
+      avg_onl:     num(cells[COL.avg_onl]),
+      pu_rec_off:  num(cells[COL.pu_rec_off]),
+      pu_rec_onl:  num(cells[COL.pu_rec_onl]),
+      pu_came_off: num(cells[COL.pu_came_off]),
+      pu_came_onl: num(cells[COL.pu_came_onl]),
+      gr_off:      num(cells[COL.gr_off]),
+      gr_onl:      num(cells[COL.gr_onl]),
+      st_off:      num(cells[COL.st_off]),
+      st_onl:      num(cells[COL.st_onl]),
+      rooms_used:  num(cells[COL.rooms_used]),
+      occ_pct:     num(cells[COL.occ_pct]),
+    });
+  }
+  return rows;
+}
+
+function parseCSVLine(line){
+  const result = []; let cur = ''; let inQ = false;
+  for(let i=0;i<line.length;i++){
+    if(line[i]==='"'){ inQ=!inQ; }
+    else if(line[i]===','&&!inQ){ result.push(cur); cur=''; }
+    else cur+=line[i];
+  }
+  result.push(cur);
+  return result;
+}
+
+// ── FETCH DATA ───────────────────────────────────────────────────────────────
+async function fetchSheetData(forceRefresh=false){
+  if(sheetLoading) return;
+  if(sheetLoaded && !forceRefresh) return;
+
+  sheetLoading = true;
+  sheetError = null;
+  renderAnalyticsLoading(true);
+
+  try{
+    // Add cache buster
+    const url = SHEET_URL + '&cachebust=' + Date.now();
+    const resp = await fetch(url, {cache:'no-store'});
+    if(!resp.ok) throw new Error('HTTP ' + resp.status);
+    const text = await resp.text();
+    sheetRows = parseCSV(text);
+    sheetLoaded = true;
+    console.log('Loaded', sheetRows.length, 'rows from sheet');
+  } catch(e){
+    sheetError = e.message;
+    console.error('Sheet fetch error:', e);
+  }
+
+  sheetLoading = false;
+  renderAnalyticsLoading(false);
+  renderAnalytics();
+}
+
+// ── DATE RANGE ───────────────────────────────────────────────────────────────
+function getDateRange(){
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  if(rangeMode==='today'){
+    return {from: today, to: today, label: 'Сегодня'};
+  }
+  if(rangeMode==='yesterday'){
+    const y = new Date(today); y.setDate(y.getDate()-1);
+    return {from: y, to: y, label: 'Вчера'};
+  }
+  if(rangeMode==='week'){
+    const f = new Date(today); f.setDate(f.getDate()-6);
+    return {from: f, to: today, label: 'Последние 7 дней'};
+  }
+  if(rangeMode==='month'){
+    const f = new Date(today.getFullYear(), today.getMonth(), 1);
+    return {from: f, to: today, label: 'Текущий месяц'};
+  }
+  if(rangeMode==='prev_month'){
+    const f = new Date(today.getFullYear(), today.getMonth()-1, 1);
+    const t = new Date(today.getFullYear(), today.getMonth(), 0);
+    const mn = ['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'];
+    return {from: f, to: t, label: mn[f.getMonth()] + ' ' + f.getFullYear()};
+  }
+  if(rangeMode==='custom' && customFrom && customTo){
+    const fmt = d => d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
+    return {from: customFrom, to: customTo, label: fmt(customFrom)+' – '+fmt(customTo)};
+  }
+  const f = new Date(today.getFullYear(), today.getMonth(), 1);
+  return {from: f, to: today, label: 'Текущий месяц'};
+}
+
+function filterRows(from, to){
+  return sheetRows.filter(r => r.date >= from && r.date <= to);
+}
+
+function sumField(rows, field){ return rows.reduce((a,r)=>a+(r[field]||0),0); }
+function lastField(rows, field){ return rows.length ? rows[rows.length-1][field] : 0; }
+function avgField(rows, field){
+  const nonzero = rows.filter(r=>(r[field]||0)>0);
+  return nonzero.length ? nonzero.reduce((a,r)=>a+r[field],0)/nonzero.length : 0;
+}
+
+// ── RENDER ───────────────────────────────────────────────────────────────────
+function fmt(n){ return Math.round(n).toLocaleString('ru-RU'); }
+function fmtPct(n){ return (Math.round(n*10)/10).toFixed(1)+'%'; }
+
+function setAEl(id, val){
+  const el = document.getElementById(id);
+  if(el) el.textContent = val;
+}
+
+function renderAnalyticsLoading(loading){
+  const el = document.getElementById('an-status');
+  if(!el) return;
+  if(loading){
+    el.innerHTML='<span style="color:var(--ink3);font-size:12px">⟳ Загрузка данных из таблицы...</span>';
+  } else if(sheetError){
+    el.innerHTML=`<span style="color:var(--coral);font-size:12px">⚠️ Ошибка: ${sheetError}. <button onclick="fetchSheetData(true)" style="color:var(--purple);background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px">Повторить</button></span>`;
+  } else {
+    el.innerHTML=`<span style="color:var(--teal);font-size:12px">✓ Данные обновлены · ${sheetRows.length} дней · <button onclick="fetchSheetData(true)" style="color:var(--purple);background:none;border:none;cursor:pointer;font-family:inherit;font-size:12px">Обновить</button></span>`;
+  }
+}
+
+function renderAnalytics(){
+  if(!sheetLoaded && !sheetError) return;
+
+  const range = getDateRange();
+  const rows = filterRows(range.from, range.to);
+
+  // Update period label
+  setAEl('an-period-label', range.label);
+  setAEl('an-rows-count', rows.length + ' дн.');
+
+  if(!rows.length){
+    setAEl('an-no-data', 'Нет данных за выбранный период');
+    document.getElementById('an-data-wrap')?.style.setProperty('display','none');
+    return;
+  }
+  setAEl('an-no-data','');
+  document.getElementById('an-data-wrap')?.style.setProperty('display','block');
+
+  // ПРИХОД
+  const revOff = sumField(rows,'rev_off');
+  const revOnl = sumField(rows,'rev_onl');
+  const revTotal = revOff + revOnl;
+  setAEl('an-rev-total', fmt(revTotal) + ' ₸');
+  setAEl('an-rev-off', fmt(revOff) + ' ₸');
+  setAEl('an-rev-onl', fmt(revOnl) + ' ₸');
+  const offPct = revTotal>0 ? Math.round(revOff/revTotal*100) : 0;
+  const onlPct = revTotal>0 ? Math.round(revOnl/revTotal*100) : 0;
+  setAEl('an-rev-off-pct', offPct+'%');
+  setAEl('an-rev-onl-pct', onlPct+'%');
+  const barOff = document.getElementById('an-bar-rev-off');
+  const barOnl = document.getElementById('an-bar-rev-onl');
+  if(barOff) barOff.style.width = offPct+'%';
+  if(barOnl) barOnl.style.width = onlPct+'%';
+
+  // МАРКЕТИНГ
+  const leadsOff = sumField(rows,'leads_off');
+  const leadsOnl = sumField(rows,'leads_onl');
+  const leadsTotal = leadsOff + leadsOnl;
+  const spend = sumField(rows,'spend');
+  const cpl = leadsTotal>0 ? spend/leadsTotal : 0;
+  setAEl('an-leads-total', leadsTotal);
+  setAEl('an-leads-off', leadsOff);
+  setAEl('an-leads-onl', leadsOnl);
+  setAEl('an-spend', fmt(spend)+' ₸');
+  setAEl('an-cpl', fmt(cpl)+' ₸');
+
+  // ПРОДАЖИ
+  const salesOff = sumField(rows,'sales_off');
+  const salesOnl = sumField(rows,'sales_onl');
+  const salesTotal = salesOff + salesOnl;
+  const avgOff = avgField(rows,'avg_off');
+  const avgOnl = avgField(rows,'avg_onl');
+  setAEl('an-sales-total', salesTotal);
+  setAEl('an-sales-off', salesOff);
+  setAEl('an-sales-onl', salesOnl);
+  setAEl('an-avg-off', fmt(avgOff)+' ₸');
+  setAEl('an-avg-onl', fmt(avgOnl)+' ₸');
+
+  // ПУ
+  const puRecOff = sumField(rows,'pu_rec_off');
+  const puRecOnl = sumField(rows,'pu_rec_onl');
+  const puRecTotal = puRecOff + puRecOnl;
+  const puCameOff = sumField(rows,'pu_came_off');
+  const puCameOnl = sumField(rows,'pu_came_onl');
+  const puCameTotal = puCameOff + puCameOnl;
+  const puConv = puRecTotal>0 ? puCameTotal/puRecTotal*100 : 0;
+  const puConvOff = puRecOff>0 ? puCameOff/puRecOff*100 : 0;
+  const puConvOnl = puRecOnl>0 ? puCameOnl/puRecOnl*100 : 0;
+  setAEl('an-pu-rec', puRecTotal);
+  setAEl('an-pu-came', puCameTotal);
+  setAEl('an-pu-conv', fmtPct(puConv));
+  setAEl('an-pu-rec-off', puRecOff); setAEl('an-pu-came-off', puCameOff);
+  setAEl('an-pu-conv-off', fmtPct(puConvOff));
+  setAEl('an-pu-rec-onl', puRecOnl); setAEl('an-pu-came-onl', puCameOnl);
+  setAEl('an-pu-conv-onl', fmtPct(puConvOnl));
+  const barPU = document.getElementById('an-bar-pu');
+  if(barPU) barPU.style.width = Math.min(100,puConv)+'%';
+
+  // АКАДЕМИЯ
+  const grOff = lastField(rows,'gr_off');
+  const grOnl = lastField(rows,'gr_onl');
+  const stOff = lastField(rows,'st_off');
+  const stOnl = lastField(rows,'st_onl');
+  const rooms = lastField(rows,'rooms_used');
+  const occ = lastField(rows,'occ_pct');
+  setAEl('an-gr-total', grOff+grOnl);
+  setAEl('an-gr-off', grOff); setAEl('an-gr-onl', grOnl);
+  setAEl('an-st-total', stOff+stOnl);
+  setAEl('an-st-off', stOff); setAEl('an-st-onl', stOnl);
+  setAEl('an-rooms', rooms);
+  setAEl('an-occ', fmtPct(occ));
+  const barOcc = document.getElementById('an-bar-occ');
+  if(barOcc) barOcc.style.width = Math.min(100,occ)+'%';
+}
+
+function setRangeMode(mode){
+  rangeMode = mode;
+  // Update active button
+  document.querySelectorAll('.range-btn').forEach(b=>{
+    b.classList.toggle('active', b.dataset.mode===mode);
+  });
+  // Show/hide custom range
+  const customWrap = document.getElementById('an-custom-wrap');
+  if(customWrap) customWrap.style.display = mode==='custom' ? 'flex' : 'none';
+  renderAnalytics();
+}
+
+function setCustomRange(){
+  const f = document.getElementById('an-date-from');
+  const t = document.getElementById('an-date-to');
+  if(f?.value && t?.value){
+    customFrom = new Date(f.value);
+    customTo = new Date(t.value);
+    customTo.setHours(23,59,59);
+    renderAnalytics();
+  }
+}
+
+function buildAnalyticsPage(){
+  const page = document.createElement('div');
+  page.className='page'; page.id='page-analytics';
+
+  page.innerHTML=`
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;gap:8px">
+    <div>
+      <div style="font-size:17px;font-weight:500;color:var(--ink)">Аналитика</div>
+      <div style="font-size:11px;color:var(--ink3)" id="an-status">Загрузка...</div>
+    </div>
+    <button onclick="fetchSheetData(true)" style="height:34px;padding:0 14px;border-radius:20px;border:0.5px solid var(--edge2);background:var(--bg2);color:var(--ink2);font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>Обновить</button>
+  </div>
+
+  <!-- ДИАПАЗОН ДАТ -->
+  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:12px 14px;margin-bottom:1.25rem">
+    <div style="font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px">ПЕРИОД</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+      <button class="range-btn active" data-mode="month" onclick="setRangeMode('month')">Месяц</button>
+      <button class="range-btn" data-mode="prev_month" onclick="setRangeMode('prev_month')">Прошлый мес.</button>
+      <button class="range-btn" data-mode="week" onclick="setRangeMode('week')">7 дней</button>
+      <button class="range-btn" data-mode="yesterday" onclick="setRangeMode('yesterday')">Вчера</button>
+      <button class="range-btn" data-mode="today" onclick="setRangeMode('today')">Сегодня</button>
+      <button class="range-btn" data-mode="custom" onclick="setRangeMode('custom')">Период ↓</button>
+    </div>
+    <div id="an-custom-wrap" style="display:none;align-items:center;gap:8px;flex-wrap:wrap">
+      <input type="date" id="an-date-from" style="height:32px;border-radius:8px;border:0.5px solid var(--edge2);background:var(--bg3);color:var(--ink);font-size:12px;padding:0 8px;font-family:inherit" onchange="setCustomRange()">
+      <span style="font-size:12px;color:var(--ink3)">—</span>
+      <input type="date" id="an-date-to" style="height:32px;border-radius:8px;border:0.5px solid var(--edge2);background:var(--bg3);color:var(--ink);font-size:12px;padding:0 8px;font-family:inherit" onchange="setCustomRange()">
+    </div>
+    <div style="display:flex;align-items:baseline;gap:8px;margin-top:8px">
+      <span id="an-period-label" style="font-size:13px;font-weight:500;color:var(--ink)">Текущий месяц</span>
+      <span id="an-rows-count" style="font-size:11px;color:var(--ink3)"></span>
+    </div>
+    <div id="an-no-data" style="font-size:12px;color:var(--ink3);margin-top:4px"></div>
+  </div>
+
+  <div id="an-data-wrap">
+
+  <!-- ПРИХОД -->
+  <div class="section-header"><div class="section-title">ОБЩИЙ ПРИХОД</div></div>
+  <div style="background:var(--purple);border-radius:var(--r);padding:1.375rem;margin-bottom:8px;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.06)"></div>
+    <div style="font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:rgba(255,255,255,0.6);margin-bottom:.4rem">ИТОГО ЗА ПЕРИОД</div>
+    <div id="an-rev-total" style="font-size:28px;font-weight:500;color:#fff;margin-bottom:.25rem;position:relative;z-index:1">—</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:.875rem">
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,0.55);margin-bottom:.3rem">ОФФЛАЙН</div>
+        <div id="an-rev-off" style="font-size:17px;font-weight:500;color:#fff">—</div>
+      </div>
+      <div style="background:rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,0.55);margin-bottom:.3rem">ОНЛАЙН</div>
+        <div id="an-rev-onl" style="font-size:17px;font-weight:500;color:#fff">—</div>
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:1.25rem">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+      <span style="font-size:11px;color:var(--ink2);min-width:70px">Оффлайн</span>
+      <div style="flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-off" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
+      <span id="an-rev-off-pct" style="font-size:12px;font-weight:500;color:var(--ink);min-width:36px;text-align:right">—</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:11px;color:var(--ink2);min-width:70px">Онлайн</span>
+      <div style="flex:1;height:6px;background:var(--bg3);border-radius:10px;overflow:hidden"><div id="an-bar-rev-onl" style="height:100%;background:var(--teal);border-radius:10px;width:0%;transition:width .5s"></div></div>
+      <span id="an-rev-onl-pct" style="font-size:12px;font-weight:500;color:var(--ink);min-width:36px;text-align:right">—</span>
+    </div>
+  </div>
+
+  <!-- МАРКЕТИНГ -->
+  <div class="section-header"><div class="section-title">МАРКЕТИНГ</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+    <div class="m-card"><div class="m-card-label">ЛИДОВ ВСЕГО</div><div class="m-card-val" id="an-leads-total">—</div><div class="m-card-sub">входящих</div></div>
+    <div class="m-card"><div class="m-card-label">CPL СРЕДНИЙ</div><div class="m-card-val" id="an-cpl">—</div><div class="m-card-sub">стоимость лида</div></div>
+    <div class="m-card"><div class="m-card-label">РАСХОД ТАРГЕТ</div><div class="m-card-val" id="an-spend">—</div><div class="m-card-sub">бюджет за период</div></div>
+    <div class="m-card" style="background:var(--bg3)">
+      <div class="m-card-label">ОФФЛАЙН / ОНЛАЙН</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
+        <span id="an-leads-off" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+        <span style="font-size:11px;color:var(--ink3)">/</span>
+        <span id="an-leads-onl" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ПРОДАЖИ -->
+  <div class="section-header"><div class="section-title">ОТДЕЛ ПРОДАЖ</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+    <div class="m-card"><div class="m-card-label">ПРОДАЖ ВСЕГО</div><div class="m-card-val" id="an-sales-total">—</div></div>
+    <div class="m-card" style="background:var(--bg3)">
+      <div class="m-card-label">ОФЛАЙН / ОНЛАЙН</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-top:4px">
+        <span id="an-sales-off" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+        <span style="font-size:11px;color:var(--ink3)">/</span>
+        <span id="an-sales-onl" style="font-size:20px;font-weight:500;color:var(--ink)">—</span>
+      </div>
+    </div>
+    <div class="m-card"><div class="m-card-label">СР. ЧЕК ОФФЛАЙН</div><div class="m-card-val" id="an-avg-off">—</div></div>
+    <div class="m-card"><div class="m-card-label">СР. ЧЕК ОНЛАЙН</div><div class="m-card-val" id="an-avg-onl">—</div></div>
+  </div>
+
+  <!-- ПУ -->
+  <div class="section-header"><div class="section-title">ПРОБНЫЙ УРОК (ПУ)</div></div>
+  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:8px">
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:12px">
+      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">ЗАПИСЕЙ</div><div id="an-pu-rec" style="font-size:22px;font-weight:500;color:var(--ink)">—</div></div>
+      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">ДОШЛО</div><div id="an-pu-came" style="font-size:22px;font-weight:500;color:var(--ink)">—</div></div>
+      <div><div style="font-size:10px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);margin-bottom:4px">КОНВЕРСИЯ</div><div id="an-pu-conv" style="font-size:22px;font-weight:500;color:var(--purple)">—</div></div>
+    </div>
+    <div style="height:6px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:12px"><div id="an-bar-pu" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--bg3);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">ОФФЛАЙН</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Записей</span><span id="an-pu-rec-off" style="font-weight:500;color:var(--ink)">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Дошло</span><span id="an-pu-came-off" style="font-weight:500;color:var(--ink)">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Конверсия</span><span id="an-pu-conv-off" style="font-weight:600;color:var(--purple)">—</span></div>
+      </div>
+      <div style="background:var(--bg3);border-radius:10px;padding:10px 12px">
+        <div style="font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px">ОНЛАЙН</div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Записей</span><span id="an-pu-rec-onl" style="font-weight:500;color:var(--ink)">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Дошло</span><span id="an-pu-came-onl" style="font-weight:500;color:var(--ink)">—</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink2);padding:3px 0">
+          <span>Конверсия</span><span id="an-pu-conv-onl" style="font-weight:600;color:var(--purple)">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- АКАДЕМИЯ -->
+  <div class="section-header"><div class="section-title">АКАДЕМИЯ</div></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+    <div class="m-card"><div class="m-card-label">ГРУПП ВСЕГО</div><div class="m-card-val" id="an-gr-total">—</div><div class="m-card-sub"><span id="an-gr-off">—</span> офф / <span id="an-gr-onl">—</span> онл</div></div>
+    <div class="m-card"><div class="m-card-label">УЧЕНИКОВ ВСЕГО</div><div class="m-card-val" id="an-st-total">—</div><div class="m-card-sub"><span id="an-st-off">—</span> офф / <span id="an-st-onl">—</span> онл</div></div>
+  </div>
+  <div style="background:var(--bg2);border:0.5px solid var(--edge);border-radius:var(--r);padding:14px;margin-bottom:1.5rem">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+      <span style="font-size:12px;font-weight:500;color:var(--ink)">Загруженность оффлайн точки</span>
+      <span id="an-occ" style="font-size:22px;font-weight:500;color:var(--purple)">—</span>
+    </div>
+    <div style="height:8px;background:var(--bg3);border-radius:10px;overflow:hidden;margin-bottom:8px"><div id="an-bar-occ" style="height:100%;background:var(--purple);border-radius:10px;width:0%;transition:width .5s"></div></div>
+    <div style="font-size:11px;color:var(--ink3)">Аудиторий занято: <span id="an-rooms" style="font-weight:500;color:var(--ink)">—</span></div>
+  </div>
+
+  </div>`;
+
+  // Range button styles
+  const style = document.createElement('style');
+  style.textContent = `.range-btn{height:30px;padding:0 12px;border-radius:20px;border:0.5px solid var(--edge2);background:var(--bg2);color:var(--ink2);font-size:11px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;} .range-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);} .range-btn:hover:not(.active){background:var(--bg3);}`;
+  document.head.appendChild(style);
+
+  return page;
+}
+
+
 if('serviceWorker' in navigator){
   // Unregister all old SWs first, then register fresh
   navigator.serviceWorker.getRegistrations().then(regs => {
     const unregs = regs.map(r => r.unregister());
     Promise.all(unregs).then(() => {
-      navigator.serviceWorker.register('./sw.js?v=1782286689').catch(()=>{});
+      navigator.serviceWorker.register('./sw.js?v=1782300251').catch(()=>{});
     });
   });
   // Also clear all caches
