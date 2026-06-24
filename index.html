@@ -5,7 +5,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<!-- Build: 20260624-063524 -->
+<!-- ForcedBuild: 1782283253 OldBuild: 20260624-063524 -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Embassy · Производственные линии</title>
 <link rel="manifest" href="manifest.json">
@@ -251,7 +251,7 @@ mark{background:var(--purple-bg);color:var(--purple-text);border-radius:3px;padd
 <div id="toast"></div>
 
 <!-- TOP BAR -->
-<div class="top-bar">
+<div class="top-bar" data-v="1782283253">
   <span class="top-bar-title" id="top-title">Embassy</span>
   <div class="top-bar-actions">
     <button class="icon-btn" onclick="openSearch()" title="Поиск"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
@@ -1098,7 +1098,19 @@ document.addEventListener('input',e=>{
 });
 
 window.addEventListener('load',()=>{ initTheme(); loadAll(); });
-if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+if('serviceWorker' in navigator){
+  // Unregister all old SWs first, then register fresh
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    const unregs = regs.map(r => r.unregister());
+    Promise.all(unregs).then(() => {
+      navigator.serviceWorker.register('./sw.js?v=1782283253').catch(()=>{});
+    });
+  });
+  // Also clear all caches
+  if(window.caches){
+    caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+  }
+}
 </script>
 </body>
 </html>
